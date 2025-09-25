@@ -1,0 +1,92 @@
+{
+    "classroom": "CSE S7 R1",
+    "admin_email": "shibinikka@gmail.com",
+    "allocation": [
+        [
+            [
+                {
+                    "subject": "Mathematics",
+                    "teacher_id": "T001"
+                },
+                {
+                    "subject": "Physics Lab",
+                    "teacher_id": "T002"
+                },
+                {
+                    "subject": "Assembly",
+                    "teacher_id": "T005"
+                }
+            ],
+            [
+                {
+                    "subject": "History",
+                    "teacher_id": "T003"
+                }
+            ],
+            null,
+            [
+                {
+                    "subject": "English",
+                    "teacher_id": "T004"
+                },
+                {
+                    "subject": "Chemistry Lab",
+                    "teacher_id": "T002"
+                }
+            ],
+            null,
+            [
+                {
+                    "subject": "Art",
+                    "teacher_id": "T006"
+                }
+            ]
+        ],
+        [
+            null,
+            [
+                {
+                    "subject": "Mathematics",
+                    "teacher_id": "T001"
+                }
+            ],
+            [
+                {
+                    "subject": "Biology",
+                    "teacher_id": "T007"
+                },
+                {
+                    "subject": "Computer Science",
+                    "teacher_id": "T001"
+                }
+            ],
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ]
+    ]
+}
