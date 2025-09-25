@@ -61,7 +61,9 @@ const ClassOnboarding = () => {
           <select
             value={teacherName}
             onChange={(e) => setTeacherName(e.target.value)}
-            className="w-full rounded-md bg-white border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+            className={`w-full rounded-md bg-white border border-gray-300 px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 ${
+              teacherName ? 'text-gray-900' : 'text-gray-400'
+            }`}
           >
             <option value="" disabled>Select a teacher</option>
             <option value="Alice Johnson">Alice Johnson</option>
@@ -75,7 +77,9 @@ const ClassOnboarding = () => {
           <select
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="w-full rounded-md bg-white border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+            className={`w-full rounded-md bg-white border border-gray-300 px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 ${
+              subject ? 'text-gray-900' : 'text-gray-400'
+            }`}
           >
             <option value="" disabled>Select a subject</option>
             <option value="Mathematics">Mathematics</option>
