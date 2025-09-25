@@ -273,6 +273,89 @@ def update_classroom_slot(classroom_id: int):
 
     return jsonify({"message": "Slot updated", "allocation": classroom.allocation})
 
+# Update only the subject for a single time slot
+# Payload: {"dayIndex": 0-4, "periodIndex": 0-5, "subject": "Math"}
+@timetable_bp.route("/classrooms/<int:classroom_id>/slot/subject", methods=["PATCH"])
+def update_classroom_slot_subject(classroom_id: int):
+    data = request.json or {}
+    day_index = data.get("dayIndex")
+    period_index = data.get("periodIndex")
+    subject = data.get("subject")
+    if day_index is None or period_index is None:
+        return jsonify({"error": "dayIndex and periodIndex are required"}), 400
+
+    classroom = Classroom.query.filter_by(classroom_id=classroom_id).first()
+    if not classroom:
+        return jsonify({"error": "Classroom not found"}), 404
+
+    allocation = classroom.allocation or []
+    while len(allocation) < 5:
+        allocation.append([None] * 6)
+    for i in range(5):
+        row = allocation[i]
+        while len(row) < 6:
+            row.append(None)
+        allocation[i] = row
+
+    current_cell = allocation[day_index][period_index]
+    # Normalize to list of one assignment for now
+    if isinstance(current_cell, list):
+        first = (current_cell[0] if current_cell else None) or {}
+    elif isinstance(current_cell, dict):
+        first = current_cell
+    else:
+        first = {}
+    teacher_id = first.get("teacher_id") or first.get("teacherId")
+    new_assignment = {"subject": subject or None}
+    if teacher_id is not None:
+        new_assignment["teacher_id"] = int(teacher_id)
+    allocation[day_index][period_index] = [new_assignment] if (subject or teacher_id is not None) else None
+    classroom.allocation = allocation
+    db.session.commit()
+    return jsonify({"message": "Subject updated", "allocation": classroom.allocation})
+
+# Update only the teacher for a single time slot
+# Payload: {"dayIndex": 0-4, "periodIndex": 0-5, "teacher_id": 123}
+@timetable_bp.route("/classrooms/<int:classroom_id>/slot/teacher", methods=["PATCH"])
+def update_classroom_slot_teacher(classroom_id: int):
+    data = request.json or {}
+    day_index = data.get("dayIndex")
+    period_index = data.get("periodIndex")
+    teacher_id = data.get("teacher_id")
+    if day_index is None or period_index is None:
+        return jsonify({"error": "dayIndex and periodIndex are required"}), 400
+
+    classroom = Classroom.query.filter_by(classroom_id=classroom_id).first()
+    if not classroom:
+        return jsonify({"error": "Classroom not found"}), 404
+
+    allocation = classroom.allocation or []
+    while len(allocation) < 5:
+        allocation.append([None] * 6)
+    for i in range(5):
+        row = allocation[i]
+        while len(row) < 6:
+            row.append(None)
+        allocation[i] = row
+
+    current_cell = allocation[day_index][period_index]
+    if isinstance(current_cell, list):
+        first = (current_cell[0] if current_cell else None) or {}
+    elif isinstance(current_cell, dict):
+        first = current_cell
+    else:
+        first = {}
+    subject = first.get("subject")
+    new_assignment = {}
+    if subject is not None:
+        new_assignment["subject"] = subject
+    if teacher_id is not None and teacher_id != "":
+        new_assignment["teacher_id"] = int(teacher_id)
+    allocation[day_index][period_index] = [new_assignment] if (subject is not None or teacher_id not in (None, "")) else None
+    classroom.allocation = allocation
+    db.session.commit()
+    return jsonify({"message": "Teacher updated", "allocation": classroom.allocation})
+
 
 def _build_teacher_subjects_map():
     teachers = Teacher.query.all()

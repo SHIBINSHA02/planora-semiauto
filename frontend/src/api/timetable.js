@@ -38,6 +38,14 @@ export const TimetableAPI = {
     http('PATCH', `/timetable/classrooms/${classroomId}/slot`, {
       body: { dayIndex, periodIndex, assignments },
     }),
+  updateSlotSubject: ({ classroomId, dayIndex, periodIndex, subject }) =>
+    http('PATCH', `/timetable/classrooms/${classroomId}/slot/subject`, {
+      body: { dayIndex, periodIndex, subject },
+    }),
+  updateSlotTeacher: ({ classroomId, dayIndex, periodIndex, teacherId }) =>
+    http('PATCH', `/timetable/classrooms/${classroomId}/slot/teacher`, {
+      body: { dayIndex, periodIndex, teacher_id: teacherId },
+    }),
   autoGenerate: (classroomId) => http('POST', `/timetable/classrooms/${classroomId}/auto_generate`),
   onboardClassroom: ({ classname, admin, subjects }) =>
     http('POST', '/timetable/classrooms/onboard', { body: { classname, admin, subjects } }),
