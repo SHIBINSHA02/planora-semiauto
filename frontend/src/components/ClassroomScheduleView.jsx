@@ -289,6 +289,16 @@ const ClassroomScheduleView = ({
             teachers={teachers}
             subjects={availableSubjects} // Pass class-specific subjects
             onUpdateSchedule={handleUpdateSchedule}
+            onAddAssignment={async (dayIndex, periodIndex, assignment) => {
+              const classroomId = parseInt(selectedClassroom);
+              await TimetableAPI.addAssignment({ classroomId, dayIndex, periodIndex, assignment });
+              // minimal refresh: trigger parent update or rely on page reload
+            }}
+            onRemoveAssignment={async (dayIndex, periodIndex, teacherId, subject) => {
+              const classroomId = parseInt(selectedClassroom);
+              await TimetableAPI.removeAssignment({ classroomId, dayIndex, periodIndex, teacherId, subject });
+              // minimal refresh
+            }}
             getTeachersForTimeSlot={getTeachersForTimeSlot}
             getTeachersForSubject={getTeachersForCurrentClassSubject}
             validateAssignment={validateTeacherAssignment}

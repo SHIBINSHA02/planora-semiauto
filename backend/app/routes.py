@@ -356,6 +356,117 @@ def update_classroom_slot_teacher(classroom_id: int):
     db.session.commit()
     return jsonify({"message": "Teacher updated", "allocation": classroom.allocation})
 
+# Add a single assignment to a slot (multi-teacher support)
+# Payload: {"dayIndex": 0-4, "periodIndex": 0-5, "assignment": {"subject": str, "teacher_id": int}}
+@timetable_bp.route("/classrooms/<int:classroom_id>/slot/assignments/add", methods=["POST"])
+def add_assignment_to_slot(classroom_id: int):
+    data = request.json or {}
+    day_index = data.get("dayIndex")
+    period_index = data.get("periodIndex")
+    assignment = data.get("assignment") or {}
+    if day_index is None or period_index is None:
+        return jsonify({"error": "dayIndex and periodIndex are required"}), 400
+    subject = assignment.get("subject")
+    teacher_id = assignment.get("teacher_id")
+    if subject is None and teacher_id is None:
+        return jsonify({"error": "assignment must include subject or teacher_id"}), 400
+
+    classroom = Classroom.query.filter_by(classroom_id=classroom_id).first()
+    if not classroom:
+        return jsonify({"error": "Classroom not found"}), 404
+
+    allocation = classroom.allocation or []
+    while len(allocation) < 5:
+        allocation.append([None] * 6)
+    for i in range(5):
+        row = allocation[i]
+        while len(row) < 6:
+            row.append(None)
+        allocation[i] = row
+
+    cell = allocation[day_index][period_index]
+    if not isinstance(cell, list):
+        cell = ([] if not cell else [cell])
+    new_item = {}
+    if subject is not None:
+        new_item["subject"] = subject
+    if teacher_id is not None:
+        new_item["teacher_id"] = int(teacher_id)
+    # Prevent duplicates (same teacher_id + subject)
+    if not any(
+        (int(x.get("teacher_id")) if x.get("teacher_id") is not None else None) == new_item.get("teacher_id") and
+        (x.get("subject") or None) == new_item.get("subject")
+        for x in cell
+    ):
+        cell.append(new_item)
+    allocation[day_index][period_index] = cell if cell else None
+    classroom.allocation = allocation
+    db.session.commit()
+    return jsonify({"message": "Assignment added", "allocation": classroom.allocation})
+
+# Remove a single assignment from a slot
+# Payload: {"dayIndex": 0-4, "periodIndex": 0-5, "teacher_id": int (optional), "subject": str (optional)}
+@timetable_bp.route("/classrooms/<int:classroom_id>/slot/assignments/remove", methods=["POST"])
+def remove_assignment_from_slot(classroom_id: int):
+    data = request.json or {}
+    day_index = data.get("dayIndex")
+    period_index = data.get("periodIndex")
+    teacher_id = data.get("teacher_id")
+    subject = data.get("subject")
+    if day_index is None or period_index is None:
+        return jsonify({"error": "dayIndex and periodIndex are required"}), 400
+
+    classroom = Classroom.query.filter_by(classroom_id=classroom_id).first()
+    if not classroom:
+        return jsonify({"error": "Classroom not found"}), 404
+
+    allocation = classroom.allocation or []
+    try:
+        cell = allocation[day_index][period_index]
+    except Exception:
+        cell = None
+    if not isinstance(cell, list):
+        cell = ([] if not cell else [cell])
+    def matches(x):
+        cond = True
+        if teacher_id is not None:
+            cond = cond and (x.get("teacher_id") == int(teacher_id))
+        if subject is not None:
+            cond = cond and ((x.get("subject") or None) == subject)
+        return cond
+    cell = [x for x in cell if not matches(x)]
+    allocation[day_index][period_index] = cell if cell else None
+    classroom.allocation = allocation
+    db.session.commit()
+    return jsonify({"message": "Assignment removed", "allocation": classroom.allocation})
+
+# Get a teacher's schedule as a single-value grid (5x6), derived from classroom allocations
+@timetable_bp.route("/teachers/<int:teacher_id>/schedule", methods=["GET"])
+def get_teacher_schedule(teacher_id: int):
+    # initialize empty grid
+    grid = [[None for _ in range(6)] for _ in range(5)]
+    classrooms = Classroom.query.all()
+    for c in classrooms:
+        alloc = c.allocation or []
+        for d in range(min(5, len(alloc))):
+            row = alloc[d] or []
+            for p in range(min(6, len(row))):
+                cell = row[p]
+                if not cell:
+                    continue
+                items = cell if isinstance(cell, list) else [cell]
+                for item in items:
+                    if not item:
+                        continue
+                    if int(item.get("teacher_id")) == int(teacher_id):
+                        grid[d][p] = {
+                            "classroomId": c.classroom_id,
+                            "classroomName": c.classroom,
+                            "subject": item.get("subject"),
+                        }
+                        break
+    return jsonify({"teacher_id": teacher_id, "grid": grid})
+
 
 def _build_teacher_subjects_map():
     teachers = Teacher.query.all()

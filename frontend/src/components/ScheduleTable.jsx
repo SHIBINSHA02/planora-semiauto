@@ -9,6 +9,8 @@ const ScheduleTable = ({
   teachers = [],
   subjects = [],
   onUpdateSchedule,
+  onAddAssignment,
+  onRemoveAssignment,
   getTeachersForTimeSlot,
   type = "classroom",
   classroom,
@@ -215,9 +217,13 @@ const ScheduleTable = ({
     const sortedTeachers = [...availableTeachers].sort((a, b) => (a.teachername || a.name || '').localeCompare(b.teachername || b.name || ''))
     const sortedSubjects = [...availableSubjects].sort((a, b) => a.localeCompare(b))
 
-    const handleClear = () => {
-      // Clear both subject and teacher independently via combined handler
-      onUpdateSchedule(rowIndex, colIndex, "", "")
+    const handleClear = async () => {
+      if (onRemoveAssignment) {
+        // remove any assignment in this cell (broad removal)
+        await onRemoveAssignment(rowIndex, colIndex, null, null)
+      } else {
+        await onUpdateSchedule(rowIndex, colIndex, "", "")
+      }
     }
 
     const handleTeacherChange = async (newTeacherId) => {
@@ -239,8 +245,11 @@ const ScheduleTable = ({
         subject = normalized.subject || ""
       }
 
-      // Call combined handler for now; page-level will split into separate PATCH calls
-      await onUpdateSchedule(rowIndex, colIndex, newTeacherId, subject)
+      if (isMultiSelect && onAddAssignment && newTeacherId) {
+        await onAddAssignment(rowIndex, colIndex, { teacher_id: parseInt(newTeacherId), subject: subject || null })
+      } else {
+        await onUpdateSchedule(rowIndex, colIndex, newTeacherId, subject)
+      }
     }
 
     return (
@@ -292,7 +301,11 @@ const ScheduleTable = ({
                   teacherId = normalized.teacherId || ""
                 }
 
-                await onUpdateSchedule(rowIndex, colIndex, teacherId, newSubject)
+                if (isMultiAssign && onAddAssignment && newSubject) {
+                  await onAddAssignment(rowIndex, colIndex, { subject: newSubject, teacher_id: teacherId ? parseInt(teacherId) : null })
+                } else {
+                  await onUpdateSchedule(rowIndex, colIndex, teacherId, newSubject)
+                }
               }}
               className="w-full px-2 py-1 text-xs border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
             >

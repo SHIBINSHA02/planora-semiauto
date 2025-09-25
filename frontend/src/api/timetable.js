@@ -46,6 +46,15 @@ export const TimetableAPI = {
     http('PATCH', `/timetable/classrooms/${classroomId}/slot/teacher`, {
       body: { dayIndex, periodIndex, teacher_id: teacherId },
     }),
+  addAssignment: ({ classroomId, dayIndex, periodIndex, assignment }) =>
+    http('POST', `/timetable/classrooms/${classroomId}/slot/assignments/add`, {
+      body: { dayIndex, periodIndex, assignment },
+    }),
+  removeAssignment: ({ classroomId, dayIndex, periodIndex, teacherId, subject }) =>
+    http('POST', `/timetable/classrooms/${classroomId}/slot/assignments/remove`, {
+      body: { dayIndex, periodIndex, teacher_id: teacherId, subject },
+    }),
+  getTeacherSchedule: (teacherId) => http('GET', `/timetable/teachers/${teacherId}/schedule`),
   autoGenerate: (classroomId) => http('POST', `/timetable/classrooms/${classroomId}/auto_generate`),
   onboardClassroom: ({ classname, admin, subjects }) =>
     http('POST', '/timetable/classrooms/onboard', { body: { classname, admin, subjects } }),
