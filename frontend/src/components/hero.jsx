@@ -1,100 +1,50 @@
 import React from 'react'
+import { Calendar, ArrowRight, Users, Star, User } from 'lucide-react'
 
 function Hero() {
   return (
-    <div className="bg-black text-white min-h-screen flex flex-col justify-center">
-      <div className="pb-16 pt-4 md:pb-24 md:pt-8 lg:pb-56 lg:pt-24 2xl:pb-64 2xl:pt-32">
-        <div className="relative mx-auto max-w-6xl 2xl:max-w-7xl flex flex-col px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          {/* Left Text Block */}
-          <div className="mx-auto w-full max-w-lg 2xl:max-w-xl text-center lg:ml-0 lg:w-1/2 lg:text-left">
-            <h1
-              className="
-                pt-20
-                mt-6
-                text-4xl
-                sm:text-5xl
-                md:text-6xl
-                xl:text-7xl
-                2xl:text-7xl
-                font-bold
-                tracking-wider
-                text-transparent
-                bg-clip-text
-                bg-gradient-to-r
-                from-[#10b981]
-                via-[#3b82f6]
-                to-[#8b5cf6]
-                hover:from-[#8b5cf6]
-                hover:via-[#10b981]
-                hover:to-[#3b82f6]
-                transition-all
-                duration-500
-              "
-            >
-              Planora Semiauto!
+    <div className="bg-gradient-to-br from-indigo-50 via-white to-cyan-50 py-20 text-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+              Revolutionize Your <span className="text-indigo-600">School Scheduling</span>
             </h1>
-
-            <p className="mt-6 sm:mt-8 max-w-2xl text-pretty text-base sm:text-lg xl:text-xl 2xl:text-xl">
-              Plan Smarter, Live Smoother
+            <p className="mt-6 text-xl text-gray-600 leading-relaxed">
+              Streamline teacher schedules, optimize resources, and enhance educational efficiency with our intelligent scheduling platform.
             </p>
-
-            <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 items-center sm:justify-center md:justify-center lg:justify-start">
-              <a href="/reviews" className="group relative inline-block w-full sm:w-40 2xl:w-52">
-                <span
-                  className="
-                    absolute
-                    inset-0
-                    rounded-md
-                    bg-gradient-to-r
-                    from-[#10b981]
-                    via-[#3b82f6]
-                    to-[#8b5cf6]
-                    blur-sm
-                    opacity-70
-                    transition-all
-                    duration-500
-                    group-hover:blur-md
-                    group-hover:opacity-100
-                  "
-                ></span>
-                <span
-                  className="
-                    relative
-                    flex
-                    items-center
-                    justify-center
-                    w-full
-                    rounded-md
-                    py-2
-                    bg-black
-                    font-semibold
-                    text-white
-                    border-2
-                    border-transparent
-                    group-hover:border-[#8b5cf6]
-                    transition-all
-                    duration-500
-                    text-base
-                    2xl:text-lg
-                  "
-                >
-                  Reviews →
-                </span>
-              </a>
-
-              <button className="w-full sm:w-40 2xl:w-52 h-11 2xl:h-12 text-base 2xl:text-lg bg-transparent border-2 border-white text-white rounded-md hover:bg-white hover:text-black transition-all duration-300">
-                <a href="/reviews" className="w-full h-full flex items-center justify-center">Dive in</a>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <button className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2">
+                <span>Start Free Trial</span>
+                <ArrowRight className="h-5 w-5" />
+              </button>
+              <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold hover:border-indigo-600 hover:text-indigo-600 transition-colors">
+                Watch Demo
               </button>
             </div>
           </div>
-
-          {/* Right Image Block */}
-          <div className="mt-12 sm:mt-16 lg:mt-8 lg:w-1/2 flex justify-center lg:justify-end px-4 sm:px-0">
-            <img
-              src="https://www.edusys.co/images/timetable-software.png"
-              alt="Pinterest Image"
-              className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl h-auto rounded-lg"
-            />
+          <div className="relative">
+            <div className="bg-white rounded-2xl shadow-2xl p-6 transform rotate-3">
+              <div className="bg-indigo-600 rounded-lg p-4 mb-4">
+                <Calendar className="h-8 w-8 text-white mx-auto" />
+              </div>
+              <div className="space-y-3">
+                <div className="bg-gray-100 rounded-lg p-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-green-500 rounded-full w-3 h-3"></div>
+                    <span className="text-sm font-medium">Math - Room 204</span>
+                  </div>
+                  <span className="text-xs text-gray-500">9:00 AM - 10:30 AM</span>
+                </div>
+                <div className="bg-gray-100 rounded-lg p-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-blue-500 rounded-full w-3 h-3"></div>
+                    <span className="text-sm font-medium">Science - Lab 1</span>
+                  </div>
+                  <span className="text-xs text-gray-500">11:00 AM - 12:30 PM</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

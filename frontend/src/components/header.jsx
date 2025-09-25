@@ -1,58 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
+import { Menu, X, LogOut } from "lucide-react";
 
 export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <header className="fixed top-0 left-0 z-20 w-full border-b border-neutral-800 bg-black/60 backdrop-blur-lg">
-      <div className="mx-auto max-w-6xl relative">
-        <div
-          className="
-            flex
-            items-center
-            justify-between
-            py-4
-            w-full
-            px-10
-          "
-        >
-          {/* Left side - Logo */}
-          <div className="flex items-center space-x-3">
-            {/* <img
-              src="/logo.svg"
-              alt="Popcorn Flix Logo"
-              width={20}
-              height={20}
-              className="object-contain "
-            /> */}
-            <span className="font-bold text-xl tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-400 to-gray-700">
-              <a href="/">PLANORA SEMIAUTO</a>
-            </span>
+    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center">
+            <div className="flex items-center space-x-2">
+              <div className="flex-shrink-0">
+                <img
+                  src="./logo.svg"
+                  alt="Planora Logo"
+                  className="h-[40px] w-auto object-contain"
+                />
+              </div>
+              <span className="text-xl font-bold">Planora</span>
+            </div>
           </div>
 
-          {/* Right side - Buttons */}
-          <div className="flex items-center gap-4 px-10">
-            <a href="/about">
-              <button className="text-neutral-300 border border-neutral-500 hover:bg-white hover:text-black px-4 py-2 rounded-md transition-all duration-300">
-                About
-              </button>
-            </a>
-            <a href="/login">
-              <button className="text-neutral-300 border border-neutral-500 hover:bg-white hover:text-black px-4 py-2 rounded-md transition-all duration-300">
-                Login
-              </button>
-            </a>
-            <a href="/signup">
-              <button className="text-neutral-300 border border-neutral-500 hover:bg-white hover:text-black px-4 py-2 rounded-md transition-all duration-300">
-                Signup
-              </button>
-            </a>
+          <nav className="hidden md:flex space-x-8">
+            <a href="#features" className="text-gray-700 hover:text-indigo-600 font-medium">Features</a>
+            <a href="#about" className="text-gray-700 hover:text-indigo-600 font-medium">About</a>
+            <a href="#testimonials" className="text-gray-700 hover:text-indigo-600 font-medium">Testimonials</a>
+          </nav>
+
+          <div className="hidden md:flex items-center space-x-4">
+            <a href="/login" className="text-gray-700 hover:text-indigo-600 font-medium">Login</a>
+            <a href="/signup" className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Get Started</a>
           </div>
 
+          <button
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
-
-        {/* Progressive Blur Effects */}
-        <div className="pointer-events-none absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-black/60 to-transparent"></div>
-        <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-black/60 to-transparent"></div>
       </div>
+
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200">
+          <div className="px-4 py-2 space-y-1">
+            <a href="#features" className="block px-3 py-2 text-gray-700 hover:text-indigo-600">Features</a>
+            <a href="#about" className="block px-3 py-2 text-gray-700 hover:text-indigo-600">About</a>
+            <a href="#testimonials" className="block px-3 py-2 text-gray-700 hover:text-indigo-600">Testimonials</a>
+            <a href="/login" className="block w-full text-left px-3 py-2 text-gray-700 hover:text-indigo-600">Login</a>
+            <a href="/signup" className="block w-full text-left px-3 py-2 bg-indigo-600 text-white rounded-lg mt-2">Get Started</a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

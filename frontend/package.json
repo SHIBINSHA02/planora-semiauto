@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "pdfmake": "^0.2.20",
+    "lucide-react": "^0.468.0",
+    "prop-types": "^15.8.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
