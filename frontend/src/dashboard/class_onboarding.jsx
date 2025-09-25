@@ -28,18 +28,58 @@ const ClassOnboarding = () => {
     setCount('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const trimmedClass = className.trim();
+    const trimmedAdmin = adminEmail.trim();
+    if (!trimmedClass || !trimmedAdmin || assignedTeachers.length === 0) {
+      alert('Please fill class name, admin email, and add at least one teacher entry.');
+      return;
+    }
+
+    // transform assignedTeachers to backend schedule schema
+    // frontend stored: { teacherName, subject, count }
+    // backend expects: { subject, teachername, time }
+    const schedule = assignedTeachers.map((t) => ({
+      subject: t.subject,
+      teachername: t.teacherName,
+      time: Number(t.count) || 0,
+    }));
+
     const payload = {
-      className: className.trim(),
-      teacherName,
-      subject,
-      count: count ? Number(count) : 0,
-      adminEmail: adminEmail.trim(),
-      teachers: assignedTeachers,
+      admin: trimmedAdmin,
+      classname: trimmedClass,
+      schedule,
     };
-    console.log('Class Onboarding Submit:', payload);
-    // TODO: wire up API submission here
+
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+    try {
+      const res = await fetch(`${API_BASE}/timetable/add_schedule`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Failed to add schedule');
+      }
+
+      // reset form on success
+      setClassName('');
+      setTeacherName('');
+      setSubject('');
+      setCount('');
+      setAdminEmail('');
+      setAssignedTeachers([]);
+      alert('Class schedule added successfully');
+    } catch (err) {
+      console.error('Add schedule failed:', err);
+      alert('Failed to add schedule');
+    }
   };
 
   return (

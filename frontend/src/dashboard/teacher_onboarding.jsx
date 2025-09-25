@@ -19,15 +19,46 @@ const TeacherOnboarding = () => {
     setSubjectInput('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const trimmedName = teacherName.trim();
+    const trimmedEmail = teacherEmail.trim();
+    if (!trimmedName || !trimmedEmail || subjects.length === 0) {
+      alert('Please fill name, email, and at least one subject.');
+      return;
+    }
+
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
     const payload = {
-      teacherName: teacherName.trim(),
-      teacherEmail: teacherEmail.trim(),
-      subjects,
+      teachername: trimmedName,
+      mailid: trimmedEmail,
+      subjects: subjects,
     };
-    console.log('Teacher Onboarding Submit:', payload);
-    // TODO: wire up API submission here
+
+    try {
+      const res = await fetch(`${API_BASE}/timetable/add_teacher`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Failed to add teacher');
+      }
+
+      // reset form on success
+      setTeacherName('');
+      setTeacherEmail('');
+      setSubjects([]);
+      alert('Teacher added successfully');
+    } catch (err) {
+      console.error('Add teacher failed:', err);
+      alert('Failed to add teacher');
+    }
   };
 
   return (
