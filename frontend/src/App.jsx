@@ -1,8 +1,8 @@
-import Dashboard from './dashboard/dashboard';
+import LandingPage from './landing/landing';
 
 function App() {
   return (
-    <Dashboard />
+    <LandingPage/>
   )
 }
 
