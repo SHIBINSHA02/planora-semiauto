@@ -16,6 +16,7 @@ timetable_bp = Blueprint("timetable", __name__)
 
 
 
+
 # 0. Get Teachers List
 # -----------------------------
 # GET /timetable/teachers
