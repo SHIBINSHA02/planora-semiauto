@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ScheduleTable from './ScheduleTable';
+import { TimetableAPI } from '../api/timetable';
 
 const ClassroomScheduleView = ({
   classrooms,
@@ -31,23 +32,37 @@ const ClassroomScheduleView = ({
     return getSubjectsForClass(classroom.grade);
   };
 
-  const getTeachersForTimeSlot = (dayIndex, periodIndex, selectedSubject = null) => {
+  const getTeachersForTimeSlot = async (dayIndex, periodIndex, selectedSubject = null) => {
     if (!selectedClassroom) return [];
-    
-    return getAvailableTeachers(
-      parseInt(selectedClassroom), 
-      dayIndex, 
-      periodIndex, 
-      selectedSubject
-    );
+    if (getAvailableTeachers) {
+      return getAvailableTeachers(
+        parseInt(selectedClassroom),
+        dayIndex,
+        periodIndex,
+        selectedSubject
+      );
+    }
+    const { teachers: available } = await TimetableAPI.getAvailableTeachersForSlot({
+      classroomId: parseInt(selectedClassroom),
+      dayIndex,
+      periodIndex,
+      subject: selectedSubject || undefined,
+    });
+    return available;
   };
-  const getTeachersForCurrentClassSubject = (subject) => {
+  const getTeachersForCurrentClassSubject = async (subject) => {
     const classroom = getCurrentClassroom();
     if (!classroom) return [];
-    
-    return getTeachersForSubject(classroom.grade, subject);
+    if (getTeachersForSubject) return getTeachersForSubject(classroom.grade, subject);
+    // Fallback: filter all teachers by subject capability
+    try {
+      const { teachers: all } = await TimetableAPI.getTeachers();
+      return all.filter(t => (t.subjects || []).includes(subject));
+    } catch (e) {
+      return [];
+    }
   };
-  const validateTeacherAssignment = (dayIndex, periodIndex, teacherId, subject) => {
+  const validateTeacherAssignment = async (dayIndex, periodIndex, teacherId, subject) => {
     if (!selectedClassroom || !teacherId) return true;
     
     const classroom = getCurrentClassroom();
@@ -62,11 +77,21 @@ const ClassroomScheduleView = ({
     if (!teacher.classes.includes(classroom.grade)) return false;
     
     // Check if teacher is available at this time
-    return isTeacherAvailable(parseInt(teacherId), dayIndex, periodIndex, parseInt(selectedClassroom));
+    if (isTeacherAvailable) {
+      return isTeacherAvailable(parseInt(teacherId), dayIndex, periodIndex, parseInt(selectedClassroom));
+    }
+    const { available } = await TimetableAPI.isTeacherAvailable({
+      teacherId: parseInt(teacherId),
+      dayIndex,
+      periodIndex,
+      subject,
+      classroomId: parseInt(selectedClassroom),
+    });
+    return available;
   };
 
   // Enhanced update schedule with validation
-  const handleUpdateSchedule = (dayIndex, periodIndex, teacherId, subject) => {
+  const handleUpdateSchedule = async (dayIndex, periodIndex, teacherId, subject) => {
     const classroom = getCurrentClassroom();
     
     if (!classroom) {
@@ -75,7 +100,8 @@ const ClassroomScheduleView = ({
     }
 
     // Validate the assignment
-    if (!validateTeacherAssignment(dayIndex, periodIndex, teacherId, subject)) {
+    const valid = await validateTeacherAssignment(dayIndex, periodIndex, teacherId, subject);
+    if (!valid) {
       console.warn('Invalid teacher assignment');
       return false;
     }
@@ -87,7 +113,17 @@ const ClassroomScheduleView = ({
       return false;
     }
 
-    return updateSchedule(parseInt(selectedClassroom), dayIndex, periodIndex, teacherId, subject);
+    if (updateSchedule) {
+      return updateSchedule(parseInt(selectedClassroom), dayIndex, periodIndex, teacherId, subject);
+    }
+    // Default: single-assignment path to backend slot update
+    await TimetableAPI.updateSlot({
+      classroomId: parseInt(selectedClassroom),
+      dayIndex,
+      periodIndex,
+      assignments: teacherId ? [{ teacher_id: parseInt(teacherId), subject }] : [],
+    });
+    return true;
   };
 
   // Get classroom statistics
@@ -297,18 +333,21 @@ const ClassroomScheduleView = ({
         <div className="pt-2 flex justify-end">
           <button
             type="button"
-            disabled={isAutoLoading || !autoGenerateSchedule}
+            disabled={isAutoLoading}
             onClick={async () => {
-              if (!autoGenerateSchedule) return;
               try {
                 setIsAutoLoading(true);
-                await autoGenerateSchedule(parseInt(selectedClassroom));
+                if (autoGenerateSchedule) {
+                  await autoGenerateSchedule(parseInt(selectedClassroom));
+                } else {
+                  await TimetableAPI.autoGenerate(parseInt(selectedClassroom));
+                }
               } finally {
                 setIsAutoLoading(false);
               }
             }}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-md font-medium shadow ${
-              isAutoLoading || !autoGenerateSchedule
+              isAutoLoading
                 ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
                 : 'bg-indigo-600 hover:bg-indigo-700 text-white'
             }`}
