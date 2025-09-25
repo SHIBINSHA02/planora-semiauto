@@ -1,47 +1,51 @@
 {
     "1": {
         "teacher_id": 1,
-        "name": "John Doe",
+        "name": "Math Teacher",
         "subject": [
-            "Mathematics",
-            "Physics",
-            "Chemistry"
+            "Mathematics"
         ]
     },
     "2": {
         "teacher_id": 2,
-        "name": "Jane Doe",
+        "name": "Physics Teacher",
         "subject": [
-            "Mathematics",
-            "English",
-            "Chemistry"
+            "Physics"
         ]
     },
     "3": {
         "teacher_id": 3,
-        "name": "Jim Doe",
+        "name": "Assembly Coordinator",
         "subject": [
-            "English",
-            "History",
-            "Biology"
+            "Assembly"
         ]
     },
     "4": {
         "teacher_id": 4,
-        "name": "Jill Doe",
+        "name": "History Teacher",
         "subject": [
-            "Physics",
-            "Chemistry",
-            "Biology"
+            "History"
         ]
     },
     "5": {
         "teacher_id": 5,
-        "name": "Jack Doe",
+        "name": "Art Teacher",
         "subject": [
-            "Computer Science",
-            "Mathematics",
-            "Physics"
+            "Art"
+        ]
+    },
+    "6": {
+        "teacher_id": 6,
+        "name": "CS Teacher",
+        "subject": [
+            "Computer Science"
+        ]
+    },
+    "7": {
+        "teacher_id": 7,
+        "name": "English Teacher",
+        "subject": [
+            "English"
         ]
     }
 }
