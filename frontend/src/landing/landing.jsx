@@ -7,9 +7,13 @@ function LandingPage() {
   // Minimal stand-ins so this page works without auth wiring
   const [user] = useState(null)
   const logout = () => {}
-  const navigate = (path) => {
-    window.location.hash = `#${path}`
-  }
+  const navigate = (path) => { window.location.hash = `#${path}` }
+
+  // Modal state for auth
+  const [isAuthOpen, setIsAuthOpen] = useState(false)
+  const [authMode, setAuthMode] = useState('login') // 'login' | 'signup'
+  const openAuth = (mode) => { setAuthMode(mode); setIsAuthOpen(true) }
+  const closeAuth = () => setIsAuthOpen(false)
 
   const features = [
     {
@@ -70,7 +74,6 @@ function LandingPage() {
             <nav className="hidden md:flex space-x-8">
               <a href="#features" className="text-gray-700 hover:text-indigo-600 font-medium">Features</a>
               <a href="#about" className="text-gray-700 hover:text-indigo-600 font-medium">About</a>
-              <a href="#testimonials" className="text-gray-700 hover:text-indigo-600 font-medium">Testimonials</a>
             </nav>
 
             <div className="hidden md:flex items-center space-x-4">
@@ -83,8 +86,8 @@ function LandingPage() {
                 </div>
               ) : (
                 <>
-                  <button onClick={() => navigate('login')} className="text-gray-700 hover:text-indigo-600 font-medium">Login</button>
-                  <button onClick={() => navigate('signup')} className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Get Started</button>
+                  <a href="/login" className="text-gray-700 hover:text-indigo-600 font-medium">Login</a>
+                  <button onClick={() => openAuth('signup')} className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Get Started</button>
                 </>
               )}
             </div>
@@ -110,7 +113,7 @@ function LandingPage() {
               ) : (
                 <>
                   <button onClick={() => navigate('login')} className="block w-full text-left px-3 py-2 text-gray-700 hover:text-indigo-600">Login</button>
-                  <button onClick={() => navigate('signup')} className="block w-full text-left px-3 py-2 bg-indigo-600 text-white rounded-lg mt-2">Get Started</button>
+                  <button onClick={() => openAuth('signup')} className="block w-full text-left px-3 py-2 bg-indigo-600 text-white rounded-lg mt-2">Get Started</button>
                 </>
               )}
             </div>
@@ -131,10 +134,17 @@ function LandingPage() {
                 Streamline teacher schedules, optimize resources, and enhance educational efficiency with our intelligent scheduling platform.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <button onClick={() => navigate(user ? 'panel' : 'signup')} className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2">
-                  <span>{user ? 'Go to Panel' : 'Start Free Trial'}</span>
-                  <ArrowRight className="h-5 w-5" />
-                </button>
+                {user ? (
+                  <button onClick={() => navigate('panel')} className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2">
+                    <span>Go to Panel</span>
+                    <ArrowRight className="h-5 w-5" />
+                  </button>
+                ) : (
+                  <a href="/login" className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2">
+                    <span>Generate Timetable</span>
+                    <ArrowRight className="h-5 w-5" />
+                  </a>
+                )}
                 {user && (
                   <button onClick={() => navigate('organization')} className="border-2 border-indigo-600 text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition-colors flex items-center justify-center space-x-2">
                     <span>Manage Organizations</span>
@@ -278,5 +288,6 @@ function LandingPage() {
 }
 
 export default LandingPage
+
 
 
