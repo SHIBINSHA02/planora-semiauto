@@ -1,8 +1,13 @@
+# FILE: backend/main.py (Consolidated Code)
+
 import json
 import random
+# Assuming Teacher, Classroom, and Subject classes are in the backend directory
 from teacher import Teacher
 from classroom import Classroom
-from subject import Subject
+from subject import Subject  # Assuming Subject class exists
+
+# --- DATA LOADING & INIT ---
 
 
 def load_data(filename):
@@ -19,120 +24,123 @@ def init_teachers(teacher_data):
     """Initializes Teacher objects from the loaded data."""
     teachers_map = {}
     for data in teacher_data.values():
-        teacher_Obx = Teacher(
+        teacher_obj = Teacher(
             teacher_id=data['teacher_id'],
             name=data['name'],
             mail=f"{data['teacher_id']}@gmail.com",
             subjects=data['subject'],
         )
-
-        teachers_map[data['teacher_id']] = teacher_Obx
-
+        teachers_map[data['teacher_id']] = teacher_obj
+    # NOTE: teachers_map keys are integers (1, 2, 3...)
     return teachers_map
 
 
 def init_classroom(classroom_data):
     """Initializes Classroom objects from the loaded data."""
-
     classroom_map = {}
-
     for data in classroom_data.values():
-        classroom_Obx = Classroom(
+        classroom_obj = Classroom(
             classroom_id=data['classroom_id'],
             name=data['classroom'],
             subject_details=data['subject_details'],
+            # Start with an empty grid for the automated allocation
             classroomSchedule=[[None for _ in range(6)] for _ in range(5)]
-            # classroomSchedule=data['allocation']
         )
-
-        classroom_map[data['classroom_id']] = classroom_Obx
-
+        # NOTE: classroom_map keys are integers (1, 2)
+        classroom_map[data['classroom_id']] = classroom_obj
     return classroom_map
+
+
+# --- CONSTRAINT & HELPER FUNCTIONS ---
+
+def check_max_subject_periods(classroom_obj, day_index, subject):
+    """
+    HARD CONSTRAINT: Returns True if the subject is currently scheduled 
+    less than 2 times on the given day.
+    """
+    count = 0
+    # Iterate through all 6 periods of the specific day
+    for assignment in classroom_obj.classroomSchedule[day_index]:
+        if assignment is not None and assignment.get("subject") == subject:
+            count += 1
+
+    # The current assignment will be the next one, so we check if the count is strictly < 2
+    return count < 2
 
 
 def find_available_teacher(subject, teachers_map, day_index, period_index):
     """
     Returns a list of Teacher objects qualified for the subject AND free 
-    at the specified day/period. Prioritizes low-ID teachers (simple weighting).
+    at the specified day/period, sorted by ID (simple priority).
     """
     available_teachers = []
 
-    # Iterate over Teacher objects
     for teacher_id, teacher_obj in teachers_map.items():
-        # 1. Check Subject Qualification
-        if subject in teacher_obj.subjects:
-
-            # 2. Check Teacher Availability (Hard Constraint: No Conflict)
+        if subject in teacher_obj.subjects:  # Check qualification
+            # Check Teacher Availability (Hard Constraint: No Conflict)
             if teacher_obj.teacher_is_free(day_index, period_index):
                 available_teachers.append(teacher_obj)
 
-    # Use a basic greedy selection (e.g., sort by ID, assuming lower ID is preferred/simpler)
-    # The lowest ID teacher will be at the front after sorting.
+    # Prioritize the teacher with the lowest ID (simple weighting)
     available_teachers.sort(key=lambda t: t.teacher_id)
-
     return available_teachers
 
 
-# FILE: backend/main.py (New Allocation Function)
+# --- ALLOCATION ENGINE ---
 
 def allocate_single_period(classroom_obj, teachers_map):
     """
-    Randomly selects a day/period and attempts to allocate a single, 
-    unassigned period from the remaining demand.
+    Attempts to allocate ONE remaining period using a randomized greedy approach.
+    Enforces cross-class and per-day subject constraints.
     """
 
-    # --- 1. Identify Subject Demand (What to schedule) ---
-    # Find a subject that still needs periods assigned
-    subject_to_schedule = None
-
-    # Simple priority: Iterate over subjects and pick the first one with remaining demand
-    for subject, count in classroom_obj.remaining_periods.items():
-        if count > 0:
-            subject_to_schedule = subject
-            break
+    # 1. Identify Subject Demand (Pick the first subject with remaining demand)
+    subject_to_schedule = next(
+        (subject for subject, count in classroom_obj.remaining_periods.items() if count > 0),
+        None  # Returns None if no subjects are left
+    )
 
     if subject_to_schedule is None:
-        return False  # No more periods to schedule for this class
+        return False
 
-    # --- 2. Random Day/Period Selection (Where to schedule) ---
+    # 2. Random Day/Period Selection
     days = [0, 1, 2, 3, 4]
     periods = [0, 1, 2, 3, 4, 5]
-
-    # Shuffle to ensure a randomized greedy approach
     random.shuffle(days)
     random.shuffle(periods)
 
     for day_index in days:
+        # Check the new Max 2 Periods Per Day constraint BEFORE checking periods
+        if not check_max_subject_periods(classroom_obj, day_index, subject_to_schedule):
+            continue
+
         for period_index in periods:
 
-            # --- 3. Hard Constraint Check 1: Class Availability ---
+            # Hard Constraint 1: Class Availability
             if not classroom_obj.classroom_is_free(day_index, period_index):
-                continue  # Slot is already taken, try next period
+                continue
 
-            # --- 4. Hard Constraint Check 2: Teacher Availability ---
-            # Get all teachers qualified AND free at this random slot
+            # Hard Constraint 2: Teacher Availability (Checked within find_available_teacher)
             available_teachers = find_available_teacher(
-                subject_to_schedule, teachers_map, day_index, period_index)
+                subject_to_schedule, teachers_map, day_index, period_index
+            )
 
             if available_teachers:
-                # Select the best available teacher (first one due to simple sort/weighting)
+                # Select the best available teacher (first one due to simple ID sort)
                 teacher_obj = available_teachers[0]
                 teacher_id = teacher_obj.teacher_id
 
-                # **SOFT CONSTRAINT CHECK (Minimal Example):** # Check the consecutive period constraint BEFORE assignment
-                # (For simplicity, we'll skip the actual 3-consecutive-check here,
-                # but this is where it would be placed)
-
-                # --- 5. ALLOCATION: Parallel Update ---
+                # --- 3. ALLOCATION: Parallel Update ---
 
                 # A. Update Class Grid
                 classroom_obj.add_classroom_schedule(
-                    day_index, period_index, subject_to_schedule, teacher_id)
+                    day_index, period_index, subject_to_schedule, teacher_id
+                )
 
-                # B. Update Teacher Grid (Parallel Update)
-                classroom_name = classroom_obj.name
+                # B. Update Teacher Grid (Crucial for cross-class conflict check)
                 teacher_obj.add_teacher_schedule(
-                    day_index, period_index, classroom_name, subject_to_schedule)
+                    day_index, period_index, classroom_obj.name, subject_to_schedule
+                )
 
                 # C. Update Demand Counter
                 classroom_obj.decrement_period_count(subject_to_schedule, 1)
@@ -142,73 +150,15 @@ def allocate_single_period(classroom_obj, teachers_map):
     return False
 
 
-def populate_existing_schedules(classroom_raw_data, classroom_map, teachers_map):
-    """
-    Initializes Teacher and Classroom grids and updates remaining periods 
-    based on the existing 'allocation' data from raw JSON.
-    """
-    for class_id, raw_data in classroom_raw_data.items():
-        classroom_obj = classroom_map[raw_data['classroom_id']]
-        class_name = raw_data['classroom']
-        allocation_grid = raw_data['allocation']  # Use the raw allocation data
-
-        # Iterate over Day (i) and Period (j) - 5 days x 6 periods
-        for day_index, day_schedule in enumerate(allocation_grid):
-            for period_index, assignments in enumerate(day_schedule):
-
-                if assignments is not None:
-                    # Assignments is a list of dicts for this slot (multiple activities)
-                    for assignment in assignments:
-                        subject = assignment['subject']
-                        teacher_id = assignment['teacher_id']
-
-                        teacher_obj = teachers_map.get(teacher_id)
-
-                        if teacher_obj:
-                            # 1. Update Teacher Grid (Marks teacher as busy)
-                            teacher_obj.add_teacher_schedule(
-                                day=day_index,
-                                period=period_index,
-                                classroom=class_name,
-                                subject=subject
-                            )
-
-                            # 2. Update Classroom Grid (Marks class as busy)
-                            # We must manually place the data here since init_classroom skipped it
-                            classroom_obj.add_classroom_schedule(
-                                day_index, period_index, subject, teacher_id
-                            )
-
-                            # 3. Update Remaining Periods (Crucial step for demand tracking)
-                            classroom_obj.decrement_period_count(subject, 1)
-
-    return classroom_map, teachers_map
-
-
 def write_schedules_to_json(classroom_map, teachers_map):
-    """
-    Writes the final schedules for classrooms and teachers to a JSON file.
-    """
+    """Writes the final schedules for classrooms and teachers to a JSON file."""
     final_schedules = {
-        "class_schedules": {},
-        "teacher_schedules": {}
+        "class_schedules": {cid: {"name": c.name, "final_allocation": c.classroomSchedule}
+                            for cid, c in classroom_map.items()},
+        "teacher_schedules": {tid: {"name": t.name, "final_allocation": t.teacherSchedule}
+                              for tid, t in teachers_map.items()}
     }
 
-    # Extract classroom schedules
-    for classroom_id, classroom_obj in classroom_map.items():
-        final_schedules["class_schedules"][classroom_id] = {
-            "name": classroom_obj.name,
-            "final_allocation": classroom_obj.classroomSchedule
-        }
-
-    # Extract teacher schedules
-    for teacher_id, teacher_obj in teachers_map.items():
-        final_schedules["teacher_schedules"][teacher_id] = {
-            "name": teacher_obj.name,
-            "final_allocation": teacher_obj.teacherSchedule
-        }
-
-    # Write the combined data to a file
     output_filename = "final_schedules.json"
     try:
         with open(output_filename, 'w') as f:
@@ -219,50 +169,45 @@ def write_schedules_to_json(classroom_map, teachers_map):
 
 
 def main():
+    # Load data using the specialized teacher set and the empty allocation grid
     teacher_raw_data = load_data('backend/teacher.json')
     classroom_raw_data = load_data('backend/sample2.json')
 
     teachers_map = init_teachers(teacher_raw_data)
     classroom_map = init_classroom(classroom_raw_data)
 
-    # Initialize State from Existing Allocation
-    # This must be done FIRST to correctly set the 'remaining_periods' and 'teacherSchedule'
-    classroom_map, teachers_map = populate_existing_schedules(
-        classroom_raw_data, classroom_map, teachers_map
-    )
+    # --- Run Automated Allocation Loop for ALL Classes ---
+    print("\n--- Starting Automated Allocation for ALL Classes ---")
 
-    # Run Automated Allocation Loop
-    print("\n--- Starting Automated Allocation ---")
+    for classroom_id, classroom_obj in classroom_map.items():
+        print(f"\nScheduling Class: {classroom_obj.name}")
 
-    # Simple loop: Only allocate periods for Classroom 1 (CSE S7 R1)
-    classroom_obj = classroom_map[1]
+        while True:
+            # Attempt to allocate ONE single period
+            success = allocate_single_period(classroom_obj, teachers_map)
 
-    while True:
-        # Attempt to allocate ONE single period
-        success = allocate_single_period(classroom_obj, teachers_map)
+            # Check if all demands are now met
+            remaining_total = sum(classroom_obj.remaining_periods.values())
 
-        # Check if all demands are now met (remaining periods = 0 for all)
-        all_done = all(
-            count <= 0 for count in classroom_obj.remaining_periods.values())
+            if remaining_total == 0:
+                print(
+                    f"✅ Success! All periods allocated for {classroom_obj.name}.")
+                break
 
-        if all_done:
-            print(
-                f"✅ Success! All periods allocated for {classroom_obj.name}.")
-            break
+            if not success:
+                # Allocation failed for the last requested subject
+                print(
+                    f"❌ Allocation halted. Cannot place remaining {remaining_total} periods for {classroom_obj.name}.")
+                break
 
-        if not success:
-            # Failed to place the last requested subject anywhere in the grid
-            print(f"❌ Allocation halted. Cannot place remaining periods.")
-            break
-
+    # --- Write the final schedules to a file ---
     write_schedules_to_json(classroom_map, teachers_map)
 
-    # --- Step 3: Display Final State ---
-    print("\n--- FINAL REMAINING DEMAND ---")
-    print(classroom_obj.remaining_periods)
-
-    print("\n--- FINAL CLASS SCHEDULE (Day 0) ---")
-    print(classroom_obj.classroomSchedule[0])
+    # --- Display final state for verification ---
+    print("\n--- FINAL ALLOCATION RESULTS ---")
+    for classroom_id, classroom_obj in classroom_map.items():
+        print(
+            f"\n{classroom_obj.name} Final Demand: {classroom_obj.remaining_periods}")
 
 
 if __name__ == "__main__":
