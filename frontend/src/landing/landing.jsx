@@ -7,13 +7,16 @@ function LandingPage() {
   // Minimal stand-ins so this page works without auth wiring
   const [user] = useState(null)
   const logout = () => {}
-  const navigate = (path) => { window.location.hash = `#${path}` }
+  const navigate = (path) => {
+    window.history.pushState({}, '', `/${path}`)
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }
 
   // Modal state for auth
-  const [isAuthOpen, setIsAuthOpen] = useState(false)
-  const [authMode, setAuthMode] = useState('login') // 'login' | 'signup'
+  const [_isAuthOpen, setIsAuthOpen] = useState(false)
+  const [_authMode, setAuthMode] = useState('login') // 'login' | 'signup'
   const openAuth = (mode) => { setAuthMode(mode); setIsAuthOpen(true) }
-  const closeAuth = () => setIsAuthOpen(false)
+  const _closeAuth = () => setIsAuthOpen(false)
 
   const features = [
     {
@@ -38,7 +41,7 @@ function LandingPage() {
     }
   ]
 
-  const testimonials = [
+  const _testimonials = [
     {
       name: "Sarah Johnson",
       role: "High School Principal",
@@ -140,7 +143,7 @@ function LandingPage() {
                     <ArrowRight className="h-5 w-5" />
                   </button>
                 ) : (
-                  <a href="/login" className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2">
+                  <a href="/login" onClick={(e)=>{e.preventDefault();navigate('login')}} className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2">
                     <span>Generate Timetable</span>
                     <ArrowRight className="h-5 w-5" />
                   </a>

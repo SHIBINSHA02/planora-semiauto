@@ -17,24 +17,27 @@ const Dashboard = () => {
             <span className="text-lg font-semibold text-gray-900">Planora</span>
           </div>
           <div className="flex items-center gap-6">
-            <button
+            <a
               className={`${activeTab === 'dashboard' ? 'text-indigo-600 font-semibold' : 'text-gray-600'} hover:text-indigo-700`}
-              onClick={() => setActiveTab('dashboard')}
+              href="/dashboard"
+              onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/dashboard'); window.dispatchEvent(new PopStateEvent('popstate')); setActiveTab('dashboard'); }}
             >
               Dashboard
-            </button>
-            <button
+            </a>
+            <a
               className={`${activeTab === 'teacher' ? 'text-indigo-600 font-semibold' : 'text-gray-600'} hover:text-indigo-700`}
-              onClick={() => setActiveTab('teacher')}
+              href="/teacher"
+              onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/teacher'); window.dispatchEvent(new PopStateEvent('popstate')); setActiveTab('teacher'); }}
             >
               Teacher
-            </button>
-            <button
+            </a>
+            <a
               className={`${activeTab === 'classroom' ? 'text-indigo-600 font-semibold' : 'text-gray-600'} hover:text-indigo-700`}
-              onClick={() => setActiveTab('classroom')}
+              href="/classroom"
+              onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/classroom'); window.dispatchEvent(new PopStateEvent('popstate')); setActiveTab('classroom'); }}
             >
               Classroom
-            </button>
+            </a>
           </div>
         </nav>
 
