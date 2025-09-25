@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 
@@ -17,6 +18,9 @@ def create_app():
 
     db.init_app(app)
     jwt.init_app(app)
+
+    # Enable CORS for frontend (adjust origins if needed)
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
     # Import and register routes
     from .routes import timetable_bp
