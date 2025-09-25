@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import db, Teacher, Subject, Classroom, Schedule
-
+from .models import db, Teacher, Classroom,Subject
 timetable_bp = Blueprint("timetable", __name__)
 
 # 0. Get Teachers List
@@ -32,8 +31,7 @@ def get_teachers():
         })
     return jsonify({"teachers": result})
 
-# 1. Add Teacher
-# -----------------------------
+
 # 1. Add Teacher
 # -----------------------------
 # POST /timetable/add_teacher
@@ -61,8 +59,7 @@ def add_teacher():
     db.session.commit()
     return jsonify({"message": "Teacher added successfully"}), 201
 
-# 2. Add Schedule
-# -----------------------------
+
 # 2. Add Schedule
 # -----------------------------
 # POST /timetable/add_schedule
@@ -86,25 +83,37 @@ def add_teacher():
 # ------------------------------------
 @timetable_bp.route("/add_schedule", methods=["POST"])
 def add_schedule():
-    data = request.json
+    data = request.json  # Expecting JSON like {"1": {classroom_id, classroom, subject_details, admin_email, allocation}, ...}
 
-    classroom = Classroom.query.filter_by(name=data["classname"]).first()
-    if not classroom:
-        classroom = Classroom(name=data["classname"], admin_mail=data["admin"])
-        db.session.add(classroom)
-        db.session.commit()
+    if not data:
+        return jsonify({"error": "Invalid JSON"}), 400
 
-    for entry in data["schedule"]:
-        sched = Schedule(
-            subject=entry["subject"],
-            teachername=entry["teachername"],
-            slots_per_week=entry["time"],  # time means slots/week
-            classroom_id=classroom.id
-        )
-        db.session.add(sched)
+    created = []
+    for key, value in data.items():
+        # Look for existing classroom by classroom_id
+        classroom = Classroom.query.filter_by(classroom_id=value["classroom_id"]).first()
+
+        if classroom:
+            # Update existing classroom
+            classroom.classroom = value.get("classroom", classroom.classroom)
+            classroom.admin_email = value.get("admin_email", classroom.admin_email)
+            classroom.subject_details = value.get("subject_details", classroom.subject_details)
+            classroom.allocation = value.get("allocation", classroom.allocation)
+        else:
+            # Create new classroom
+            classroom = Classroom(
+                classroom_id=value["classroom_id"],
+                classroom=value["classroom"],
+                admin_email=value["admin_email"],
+                subject_details=value.get("subject_details"),
+                allocation=value.get("allocation")
+            )
+            db.session.add(classroom)
+
+        created.append(classroom.classroom_id)
 
     db.session.commit()
-    return jsonify({"message": "Schedule added successfully"}), 201
+    return jsonify({"message": "Classrooms added/updated successfully", "ids": created}), 201
 
 # 3. Get Classroom Schedule
 # -----------------------------
@@ -120,20 +129,18 @@ def add_schedule():
 # }
 # If classroom not found:
 # {"error": "Classroom not found"}
-@timetable_bp.route("/classroom/<string:classname>/schedule", methods=["GET"])
+@timetable_bp.route("/classroom/<string:classname>", methods=["GET"])
 def get_classroom_schedule(classname):
-    classroom = Classroom.query.filter_by(name=classname).first()
+    # Fetch classroom by classroom_id
+    classroom = Classroom.query.filter_by(classroom=classname).first()
     if not classroom:
         return jsonify({"error": "Classroom not found"}), 404
 
-    schedule_items = [{
-        "subject": sched.subject,
-        "teachername": sched.teachername,
-        "slots_per_week": sched.slots_per_week
-    } for sched in classroom.schedules]
-
+    # Return classroom info including allocation and subject_details
     return jsonify({
-        "classname": classroom.name,
-        "admin": classroom.admin_mail,
-        "schedule": schedule_items
+        "classroom_id": classroom.classroom_id,
+        "classroom": classroom.classroom,
+        "admin_email": classroom.admin_email,
+        "subject_details": classroom.subject_details,
+        "allocation": classroom.allocation
     })
