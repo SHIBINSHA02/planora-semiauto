@@ -49,8 +49,6 @@ def init_classroom(classroom_data):
 
     return classroom_map
 
-# FILE: backend/main.py (New Helper Function)
-
 
 def find_available_teacher(subject, teachers_map, day_index, period_index):
     """
@@ -139,13 +137,9 @@ def allocate_single_period(classroom_obj, teachers_map):
                 # C. Update Demand Counter
                 classroom_obj.decrement_period_count(subject_to_schedule, 1)
 
-                return True  # Successful assignment, stop and move to next required period
+                return True
 
-    return False  # Failed to find a slot for this subject across the entire week
-
-# FILE: backend/main.py (New function added above main())
-
-# ... (init_classroom function) ...
+    return False
 
 
 def populate_existing_schedules(classroom_raw_data, classroom_map, teachers_map):
