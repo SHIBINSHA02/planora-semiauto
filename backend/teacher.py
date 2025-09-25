@@ -4,19 +4,16 @@ class Teacher:
         self.name = name
         self.mail = mail
         self.subjects = subjects
-        self.teacherSchedule = []
+        self.teacherSchedule = [[None for _ in range(6)] for _ in range(5)]
 
     def info_getter(self):
         return {
             "teacher_id": self.teacher_id,
             "name": self.name,
+            "mail": self.mail,
             "subjects": self.subjects,
             "teacherSchedule": self.teacherSchedule
         }
 
     def add_teacher_schedule(self, day, time, subject):
-        self.teacherSchedule.append({
-            "day": day,
-            "time": time,
-            "subject": subject
-        })
+        self.teacherSchedule[day][time] = subject

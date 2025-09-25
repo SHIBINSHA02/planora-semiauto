@@ -3,7 +3,7 @@ class Classroom:
         self.classroom_id = classroom_id
         self.name = name
         self.subjects = subjects
-        self.classroomSchedule = []
+        self.classroomSchedule = [[None for _ in range(6)] for _ in range(5)]
 
     def info_getter(self):
         return {
@@ -13,9 +13,5 @@ class Classroom:
             "classroomSchedule": self.classroomSchedule
         }
 
-    def add_classroom_schedule(self, day, time, subject):
-        self.classroomSchedule.append({
-            "day": day,
-            "time": time,
-            "subject": subject
-        })
+    def add_classroom_schedule(self, day, time, subject, teacher):
+        self.classroomSchedule[day][time] = [subject, teacher]
