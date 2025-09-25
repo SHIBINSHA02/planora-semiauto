@@ -3,6 +3,35 @@ from .models import db, Teacher, Subject, Classroom, Schedule
 
 timetable_bp = Blueprint("timetable", __name__)
 
+# 0. Get Teachers List
+# -----------------------------
+# GET /timetable/teachers
+# Response JSON:
+# {
+#   "teachers": [
+#     {
+#       "id": 1,
+#       "teachername": "Alice",
+#       "mailid": "alice@example.com",
+#       "subjects": ["Math", "Physics"]
+#     },
+#     ...
+#   ]
+# }
+@timetable_bp.route("/teachers", methods=["GET"])
+def get_teachers():
+    teachers = Teacher.query.all()
+    result = []
+    for teacher in teachers:
+        subject_names = [subject.name for subject in teacher.subjects]
+        result.append({
+            "id": teacher.id,
+            "teachername": teacher.teachername,
+            "mailid": teacher.mailid,
+            "subjects": subject_names
+        })
+    return jsonify({"teachers": result})
+
 # 1. Add Teacher
 # -----------------------------
 # 1. Add Teacher
@@ -76,3 +105,35 @@ def add_schedule():
 
     db.session.commit()
     return jsonify({"message": "Schedule added successfully"}), 201
+
+# 3. Get Classroom Schedule
+# -----------------------------
+# GET /timetable/classroom/<classname>/schedule
+# Response JSON when classroom exists:
+# {
+#   "classname": "ClassA",
+#   "admin": "alice@example.com",
+#   "schedule": [
+#     {"subject": "Math", "teachername": "Alice", "slots_per_week": 5},
+#     ...
+#   ]
+# }
+# If classroom not found:
+# {"error": "Classroom not found"}
+@timetable_bp.route("/classroom/<string:classname>/schedule", methods=["GET"])
+def get_classroom_schedule(classname):
+    classroom = Classroom.query.filter_by(name=classname).first()
+    if not classroom:
+        return jsonify({"error": "Classroom not found"}), 404
+
+    schedule_items = [{
+        "subject": sched.subject,
+        "teachername": sched.teachername,
+        "slots_per_week": sched.slots_per_week
+    } for sched in classroom.schedules]
+
+    return jsonify({
+        "classname": classroom.name,
+        "admin": classroom.admin_mail,
+        "schedule": schedule_items
+    })
