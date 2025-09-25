@@ -17,39 +17,39 @@
                 [
                     {
                         "subject": "Mathematics",
-                        "teacher_id": "T001"
+                        "teacher_id": 1
                     },
                     {
                         "subject": "Physics",
-                        "teacher_id": "T002"
+                        "teacher_id": 4
                     },
                     {
                         "subject": "Assembly",
-                        "teacher_id": "T005"
+                        "teacher_id": 5
                     }
                 ],
                 [
                     {
                         "subject": "History",
-                        "teacher_id": "T003"
+                        "teacher_id": 3
                     }
                 ],
                 null,
                 [
                     {
                         "subject": "English",
-                        "teacher_id": "T004"
+                        "teacher_id": 2
                     },
                     {
                         "subject": "Chemistry",
-                        "teacher_id": "T002"
+                        "teacher_id": 1
                     }
                 ],
                 null,
                 [
                     {
                         "subject": "Art",
-                        "teacher_id": "T006"
+                        "teacher_id": 3
                     }
                 ]
             ],
@@ -58,17 +58,17 @@
                 [
                     {
                         "subject": "Mathematics",
-                        "teacher_id": "T001"
+                        "teacher_id": 5
                     }
                 ],
                 [
                     {
                         "subject": "Art",
-                        "teacher_id": "T006"
+                        "teacher_id": 3
                     },
                     {
                         "subject": "Computer Science",
-                        "teacher_id": "T001"
+                        "teacher_id": 5
                     }
                 ],
                 null,
@@ -105,6 +105,15 @@
         "classroom_id": 2,
         "classroom": "CSE S7 R2",
         "admin_email": "sdtheevandi@gmail.com",
+        "subject_details": {
+            "Mathematics": 5,
+            "Physics": 3,
+            "Assembly": 3,
+            "History": 4,
+            "Art": 5,
+            "Computer Science": 5,
+            "English": 5
+        },
         "allocation": [
             [
                 null,

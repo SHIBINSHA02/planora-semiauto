@@ -1,6 +1,6 @@
 {
     "1": {
-        "teacher_id": "T001",
+        "teacher_id": 1,
         "name": "John Doe",
         "subject": [
             "Mathematics",
@@ -9,7 +9,7 @@
         ]
     },
     "2": {
-        "teacher_id": "T002",
+        "teacher_id": 2,
         "name": "Jane Doe",
         "subject": [
             "Mathematics",
@@ -18,7 +18,7 @@
         ]
     },
     "3": {
-        "teacher_id": "T003",
+        "teacher_id": 3,
         "name": "Jim Doe",
         "subject": [
             "English",
@@ -27,7 +27,7 @@
         ]
     },
     "4": {
-        "teacher_id": "T004",
+        "teacher_id": 4,
         "name": "Jill Doe",
         "subject": [
             "Physics",
@@ -36,7 +36,7 @@
         ]
     },
     "5": {
-        "teacher_id": "T005",
+        "teacher_id": 5,
         "name": "Jack Doe",
         "subject": [
             "Computer Science",
