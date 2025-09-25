@@ -13,13 +13,14 @@ class Classroom:
             "classroomSchedule": self.classroomSchedule
         }
 
+    def classroom_is_free(self, day, period):
+        """Returns True if the classroom is free at the given day and period."""
+        return self.classroomSchedule[day][period] is None
+
     def add_classroom_schedule(self, day, period, subject, teacher):
+        """Adds the classroom schedule for the given day and period."""
         period_details = {
             "subject": subject,
             "teacher": teacher,
         }
-        if self.classroomSchedule[day][period] is not None:
-            print("Period already occupied")
-            return False
         self.classroomSchedule[day][period] = period_details
-        return True
