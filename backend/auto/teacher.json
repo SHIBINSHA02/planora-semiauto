@@ -1,0 +1,51 @@
+{
+    "1": {
+        "teacher_id": 1,
+        "name": "Math Teacher",
+        "subject": [
+            "Mathematics"
+        ]
+    },
+    "2": {
+        "teacher_id": 2,
+        "name": "Physics Teacher",
+        "subject": [
+            "Physics"
+        ]
+    },
+    "3": {
+        "teacher_id": 3,
+        "name": "Assembly Coordinator",
+        "subject": [
+            "Assembly"
+        ]
+    },
+    "4": {
+        "teacher_id": 4,
+        "name": "History Teacher",
+        "subject": [
+            "History"
+        ]
+    },
+    "5": {
+        "teacher_id": 5,
+        "name": "Art Teacher",
+        "subject": [
+            "Art"
+        ]
+    },
+    "6": {
+        "teacher_id": 6,
+        "name": "CS Teacher",
+        "subject": [
+            "Computer Science"
+        ]
+    },
+    "7": {
+        "teacher_id": 7,
+        "name": "English Teacher",
+        "subject": [
+            "English"
+        ]
+    }
+}
