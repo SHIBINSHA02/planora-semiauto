@@ -135,7 +135,7 @@ const ScheduleTable = ({
           className="w-full px-2 py-1 text-xs border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white text-left flex justify-between items-center"
         >
           <span className="truncate">
-            {selectedTeacher ? selectedTeacher.name : 'Select Teacher'}
+            {selectedTeacher ? (selectedTeacher.teachername || selectedTeacher.name) : 'Select Teacher'}
           </span>
           <span className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
             ▼
@@ -169,7 +169,7 @@ const ScheduleTable = ({
                 }}
                 onMouseLeave={handleTeacherLeave}
               >
-                <div className="font-medium">{teacher.name}</div>
+                <div className="font-medium">{teacher.teachername || teacher.name}</div>
                 <div className="text-gray-500 text-xs">
                   {teacher.subjects?.join(', ') || 'All subjects'}
                 </div>
@@ -182,24 +182,26 @@ const ScheduleTable = ({
   }
 
   const renderClassroomCell = (cell, rowIndex, colIndex) => {
-    const allAvailableTeachers = getTeachersForTimeSlot
+    const normalized = cell && !Array.isArray(cell) && typeof cell === 'object' ? cell : (cell || {});
+    const maybeTeachers = getTeachersForTimeSlot
       ? getTeachersForTimeSlot(rowIndex, colIndex, classroom?.grade)
       : teachers
+    const allAvailableTeachers = (maybeTeachers && typeof maybeTeachers.then === 'function') ? teachers : (maybeTeachers || teachers)
 
-    const availableTeachers = cell.subject
+    const availableTeachers = normalized.subject
       ? allAvailableTeachers.filter(
-          (teacher) => !teacher.subjects || teacher.subjects.length === 0 || teacher.subjects.includes(cell.subject),
+          (teacher) => !teacher.subjects || teacher.subjects.length === 0 || teacher.subjects.includes(normalized.subject),
         )
       : allAvailableTeachers
 
-    const availableSubjects = cell.teacherId
+    const availableSubjects = normalized.teacherId
       ? subjects.filter((subject) => {
-          const teacher = allAvailableTeachers.find((t) => t.id === cell.teacherId)
+          const teacher = allAvailableTeachers.find((t) => t.id === normalized.teacherId)
           return !teacher?.subjects || teacher.subjects.length === 0 || teacher.subjects.includes(subject)
         })
       : subjects
 
-    const sortedTeachers = [...availableTeachers].sort((a, b) => a.name.localeCompare(b.name))
+    const sortedTeachers = [...availableTeachers].sort((a, b) => (a.teachername || a.name || '').localeCompare(b.teachername || b.name || ''))
     const sortedSubjects = [...availableSubjects].sort((a, b) => a.localeCompare(b))
 
     const handleClear = () => {
@@ -208,7 +210,7 @@ const ScheduleTable = ({
 
     const handleTeacherChange = (newTeacherId) => {
       const newTeacher = allAvailableTeachers.find((t) => t.id == newTeacherId)
-      let subject = cell.subject
+      let subject = normalized.subject
 
       if (newTeacherId) {
         if (subject) {
@@ -222,7 +224,7 @@ const ScheduleTable = ({
           }
         }
       } else {
-        subject = cell.subject || ""
+        subject = normalized.subject || ""
       }
 
       onUpdateSchedule(rowIndex, colIndex, newTeacherId, subject)
@@ -230,7 +232,7 @@ const ScheduleTable = ({
 
     return (
       <div className="space-y-1">
-        {(cell.teacherId || cell.subject) && (
+        {(normalized.teacherId || normalized.subject) && (
           <button
             onClick={handleClear}
             className="w-full px-2 py-1 text-xs bg-red-100 text-red-600 border border-red-200 rounded hover:bg-red-200 focus:outline-none focus:ring-1 focus:ring-red-500"
@@ -243,7 +245,7 @@ const ScheduleTable = ({
           {isMultiSelect && <span className="text-green-500 text-lg">+</span>}
           <div className="flex-1">
             <CustomTeacherDropdown
-              value={cell.teacherId || ""}
+              value={normalized.teacherId || ""}
               onChange={handleTeacherChange}
               teachers={sortedTeachers}
               rowIndex={rowIndex}
@@ -257,12 +259,12 @@ const ScheduleTable = ({
           {isMultiAssign && <span className="text-green-500 text-lg">+</span>}
           <div className="flex-1">
             <select
-              value={cell.subject || ""}
+              value={normalized.subject || ""}
               onChange={(e) => {
                 const newSubject = e.target.value
-                const currentTeacher = allAvailableTeachers.find((t) => t.id === cell.teacherId)
+                const currentTeacher = allAvailableTeachers.find((t) => t.id === normalized.teacherId)
 
-                let teacherId = cell.teacherId
+                let teacherId = normalized.teacherId
 
                 if (newSubject) {
                   const canTeach =
@@ -274,7 +276,7 @@ const ScheduleTable = ({
                     teacherId = ""
                   }
                 } else {
-                  teacherId = cell.teacherId || ""
+                  teacherId = normalized.teacherId || ""
                 }
 
                 onUpdateSchedule(rowIndex, colIndex, teacherId, newSubject)

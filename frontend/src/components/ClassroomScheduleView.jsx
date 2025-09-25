@@ -71,10 +71,12 @@ const ClassroomScheduleView = ({
     if (!teacher || !classroom) return false;
     
     // Check if teacher can teach this subject
-    if (subject && !teacher.subjects.includes(subject)) return false;
+    if (subject && Array.isArray(teacher.subjects) && !teacher.subjects.includes(subject)) return false;
     
-    // Check if teacher can teach this class
-    if (!teacher.classes.includes(classroom.grade)) return false;
+    // Check if teacher can teach this class (only if classes provided)
+    if (Array.isArray(teacher.classes) && teacher.classes.length > 0) {
+      if (!teacher.classes.includes(classroom.grade)) return false;
+    }
     
     // Check if teacher is available at this time
     if (isTeacherAvailable) {
@@ -129,22 +131,49 @@ const ClassroomScheduleView = ({
   // Get classroom statistics
   const getClassroomStats = () => {
     const classroom = getCurrentClassroom();
-    if (!classroom || !classSchedules[selectedClassroom]) return null;
+    const key = selectedClassroom ? parseInt(selectedClassroom) : null;
+    if (!classroom || key == null || !classSchedules[key]) return null;
 
-    
-    const schedule = classSchedules[parseInt(selectedClassroom)];
+    const schedule = classSchedules[key] || [];
     let totalSlots = 0;
     let filledSlots = 0;
-    let subjectCount = {};
-    let teacherCount = {};
+    const subjectCount = {};
+    const teacherCount = {};
+
+    const getTeacherNameById = (id) => {
+      const t = teachers.find(x => x.id === Number(id));
+      return t ? (t.teachername || String(id)) : String(id);
+    };
 
     schedule.forEach(day => {
-      day.forEach(period => {
+      (day || []).forEach(cell => {
         totalSlots++;
-        if (period.teacherId) {
-          filledSlots++;
-          subjectCount[period.subject] = (subjectCount[period.subject] || 0) + 1;
-          teacherCount[period.teacher] = (teacherCount[period.teacher] || 0) + 1;
+        if (!cell) return; // empty slot
+        // Backend stores an array of assignments per slot
+        if (Array.isArray(cell)) {
+          if (cell.length > 0) filledSlots++;
+          cell.forEach(assign => {
+            if (!assign) return;
+            const subject = assign.subject || 'Unknown';
+            const teacherId = assign.teacher_id != null ? assign.teacher_id : assign.teacherId;
+            subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+            if (teacherId != null) {
+              const name = getTeacherNameById(teacherId);
+              teacherCount[name] = (teacherCount[name] || 0) + 1;
+            }
+          });
+        } else if (typeof cell === 'object') {
+          // Legacy single-assignment object
+          const teacherId = cell.teacher_id != null ? cell.teacher_id : cell.teacherId;
+          const subject = cell.subject || 'Unknown';
+          if (teacherId != null || subject) {
+            filledSlots++;
+            subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+            if (teacherId != null) {
+              const name = getTeacherNameById(teacherId);
+              teacherCount[name] = (teacherCount[name] || 0) + 1;
+            }
+          }
         }
       });
     });
@@ -152,7 +181,7 @@ const ClassroomScheduleView = ({
     return {
       totalSlots,
       filledSlots,
-      completionPercentage: Math.round((filledSlots / totalSlots) * 100),
+      completionPercentage: totalSlots > 0 ? Math.round((filledSlots / totalSlots) * 100) : 0,
       subjectCount,
       teacherCount
     };
@@ -232,7 +261,7 @@ const ClassroomScheduleView = ({
                 Available Teachers
               </h3>
               <div className="text-xs text-gray-600">
-                {teachers.filter(t => t.classes.includes(currentClassroom?.grade)).length} teachers 
+                {teachers.filter(t => Array.isArray(t.classes) ? t.classes.includes(currentClassroom?.grade) : true).length} teachers 
                 can teach this class
               </div>
               {stats && Object.keys(stats.teacherCount).length > 0 && (
