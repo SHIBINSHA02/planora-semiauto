@@ -1,3 +1,4 @@
+// frontend/src/components/tables/teachergrid.jsx
 import React, { useMemo, useCallback } from 'react';
 
 /**
@@ -158,11 +159,11 @@ export const TeacherScheduleGrid = ({
       {/* Header Information */}
       <div className="mb-3 border-b pb-2">
         <h4 className="font-semibold text-base text-gray-800 mb-1">
-          {teacher.name}'s Weekly Schedule
+          {(teacher.teachername || teacher.name)}'s Weekly Schedule
         </h4>
         <div className="space-y-1 text-xs text-gray-600">
-          <p><strong>Qualified subjects:</strong> {teacher.subjects?.join(', ') || 'All subjects'}</p>
-          <p><strong>Can teach grades:</strong> {teacher.classes?.join(', ') || 'All grades'}</p>
+          <p><strong>Qualified subjects:</strong> {Array.isArray(teacher.subjects) ? teacher.subjects.join(', ') : 'All subjects'}</p>
+          <p><strong>Can teach grades:</strong> {Array.isArray(teacher.classes) ? teacher.classes.join(', ') : 'All grades'}</p>
           {workloadStats.mostTaughtSubject && (
             <p><strong>Primary subject:</strong> {workloadStats.mostTaughtSubject}</p>
           )}
