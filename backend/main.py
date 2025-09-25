@@ -168,155 +168,46 @@ def write_schedules_to_json(classroom_map, teachers_map):
         print(f"\n❌ Error: Could not write to file {output_filename}.")
 
 
-def check_for_infeasibility(classroom_obj):
-    """
-    Checks if remaining demand is impossible to meet due to:
-    1. Max Periods Per Day Constraint (Max 2).
-    2. Zero remaining slots for the class.
-    """
-
-    # 1. Total Slot Check (Resource Bottleneck)
-    total_periods_assigned = sum(classroom_obj.subject_details.values(
-    )) - sum(classroom_obj.remaining_periods.values())
-    if total_periods_assigned >= 30:  # Max slots in a 5x6 grid
-        return "SLOT_SATURATION"
-
-    # 2. Max Periods Per Day Check (Constraint Impossibility)
-    for subject, required_count in classroom_obj.remaining_periods.items():
-        if required_count > 0:
-
-            # Count how many days the subject is currently scheduled < 2 times
-            available_slots_left = 0
-            for day_index in range(5):
-                # Count current placements on this day
-                current_count = sum(1 for assignment in classroom_obj.classroomSchedule[day_index]
-                                    if assignment is not None and assignment.get('subject') == subject)
-
-                # Add potential slots (2 minus what's currently scheduled)
-                available_slots_left += (2 - current_count)
-
-            # Check against total required periods
-            if required_count > available_slots_left:
-                return f"MAX_PERIODS_EXCEEDED_FOR_{subject}"
-
-    return None  # Schedule is still feasible
-
-
-# def main():
-#     # Load data using the specialized teacher set and the empty allocation grid
-#     teacher_raw_data = load_data('backend/teacher.json')
-#     classroom_raw_data = load_data('backend/sample2.json')
-
-#     teachers_map = init_teachers(teacher_raw_data)
-#     classroom_map = init_classroom(classroom_raw_data)
-
-#     # --- Run Automated Allocation Loop for ALL Classes ---
-#     print("\n--- Starting Automated Allocation for ALL Classes ---")
-
-#     for classroom_id, classroom_obj in classroom_map.items():
-#         print(f"\nScheduling Class: {classroom_obj.name}")
-
-#         while True:
-#             # Attempt to allocate ONE single period
-#             success = allocate_single_period(classroom_obj, teachers_map)
-
-#             # Check if all demands are now met
-#             remaining_total = sum(classroom_obj.remaining_periods.values())
-
-#             if remaining_total == 0:
-#                 print(
-#                     f"✅ Success! All periods allocated for {classroom_obj.name}.")
-#                 break
-
-#             if not success:
-#                 # Allocation failed for the last requested subject
-#                 print(
-#                     f"❌ Allocation halted. Cannot place remaining {remaining_total} periods for {classroom_obj.name}.")
-#                 break
-
-#     # --- Write the final schedules to a file ---
-#     write_schedules_to_json(classroom_map, teachers_map)
-
-#     # --- Display final state for verification ---
-#     print("\n--- FINAL ALLOCATION RESULTS ---")
-#     for classroom_id, classroom_obj in classroom_map.items():
-#         print(
-#             f"\n{classroom_obj.name} Final Demand: {classroom_obj.remaining_periods}")
-MAX_ATTEMPTS = 50
-
-
 def main():
-    # --- STATIC INITIALIZATION (Runs ONLY once) ---
+    # Load data using the specialized teacher set and the empty allocation grid
     teacher_raw_data = load_data('backend/teacher.json')
     classroom_raw_data = load_data('backend/sample2.json')
 
-    # --- THE RETRY LOOP ---
-    for attempt in range(1, MAX_ATTEMPTS + 1):
-        print(f"\n--- ATTEMPT {attempt} of {MAX_ATTEMPTS} ---")
+    teachers_map = init_teachers(teacher_raw_data)
+    classroom_map = init_classroom(classroom_raw_data)
 
-        # 1. WORKING STATE INITIALIZATION (Resets for every attempt)
-        # Create fresh, empty Teacher and Classroom objects for the new try.
-        teachers_map = init_teachers(teacher_raw_data)
-        classroom_map = init_classroom(classroom_raw_data)
+    # --- Run Automated Allocation Loop for ALL Classes ---
+    print("\n--- Starting Automated Allocation for ALL Classes ---")
 
-        successful_run = True
+    for classroom_id, classroom_obj in classroom_map.items():
+        print(f"\nScheduling Class: {classroom_obj.name}")
 
-        # 2. ALLOCATION LOGIC (The attempt to build the schedule)
-        for classroom_id, classroom_obj in classroom_map.items():
-            print(f"Scheduling Class: {classroom_obj.name}")
+        while True:
+            # Attempt to allocate ONE single period
+            success = allocate_single_period(classroom_obj, teachers_map)
 
-            # Loop to schedule all required single periods for this class
-            while True:
-                success = allocate_single_period(classroom_obj, teachers_map)
+            # Check if all demands are now met
+            remaining_total = sum(classroom_obj.remaining_periods.values())
 
-                remaining_total = sum(classroom_obj.remaining_periods.values())
-
-                if remaining_total == 0:
-                    break  # Class is fully scheduled
-
-                if not success:
-                    # Allocation failure occurred for a subject. Test feasibility.
-                    infeasibility_reason = check_for_infeasibility(
-                        classroom_obj)
-
-                    if infeasibility_reason:
-                        # Log the fatal constraint violation and stop this attempt.
-                        print(
-                            f"❌ FATAL INFEASIBILITY detected for {classroom_obj.name}: {infeasibility_reason}")
-                        successful_run = False
-                        break
-                    else:
-                        # Failed due to poor randomization, but still feasible. Break the inner loop
-                        # to allow the outer retry loop to start a new, random attempt.
-                        successful_run = False
-                        break
-
-            if not successful_run:
-                break  # If one class fails, stop the outer class loop and start a new attempt
-
-        # 3. CHECK & TERMINATE
-        # We need the final remaining total across ALL classes
-        grand_remaining_total = sum(
-            sum(c.remaining_periods.values()) for c in classroom_map.values()
-        )
-
-        if successful_run and grand_remaining_total == 0:
-            print(
-                f"✅ FINAL SUCCESS! Timetable generated in {attempt} attempts.")
-            write_schedules_to_json(classroom_map, teachers_map)
-            #     # --- Display final state for verification ---
-            print("\n--- FINAL ALLOCATION RESULTS ---")
-            for classroom_id, classroom_obj in classroom_map.items():
+            if remaining_total == 0:
                 print(
-                    f"\n{classroom_obj.name} Final Demand: {classroom_obj.remaining_periods}")
-            return  # Exit the entire program upon success
+                    f"✅ Success! All periods allocated for {classroom_obj.name}.")
+                break
 
-        # If unsuccessful, the loop simply increments 'attempt' and tries again.
+            if not success:
+                # Allocation failed for the last requested subject
+                print(
+                    f"❌ Allocation halted. Cannot place remaining {remaining_total} periods for {classroom_obj.name}.")
+                break
+
+    # --- Write the final schedules to a file ---
+    write_schedules_to_json(classroom_map, teachers_map)
+
+    # --- Display final state for verification ---
+    print("\n--- FINAL ALLOCATION RESULTS ---")
+    for classroom_id, classroom_obj in classroom_map.items():
         print(
-            f"❌ Attempt {attempt} failed. Grand Remaining: {grand_remaining_total}. Retrying...")
-
-    print(
-        f"\nFATAL ERROR: Could not find a feasible timetable within {MAX_ATTEMPTS} attempts.")
+            f"\n{classroom_obj.name} Final Demand: {classroom_obj.remaining_periods}")
 
 
 if __name__ == "__main__":
