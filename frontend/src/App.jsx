@@ -28,12 +28,11 @@ function App() {
       case '':
         return <LandingPage/>;
       case '/dashboard':
-        return <Dashboard/>;
+        return <Dashboard initialTab="dashboard"/>;
       case '/teacher':
-        return <Teacher/>;
+        return <Dashboard initialTab="teacher"/>;
       case '/classroom':
-      case '/classsroom':
-        return <Classroom/>;
+        return <Dashboard initialTab="classroom"/>;
       case '/login':
         return <Login onLoggedIn={() => navigate('/dashboard')} />;
       case '/signup':

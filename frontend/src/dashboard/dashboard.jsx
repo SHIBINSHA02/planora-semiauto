@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClassOnboarding from './class_onboarding';
 import TeacherOnboarding from './teacher_onboarding';
 import DownloadPanel from './download_panel';
 import Teacher from '../teacher/teacher';
 import Classroom from '../classroom/classroom';
 
-const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+const Dashboard = ({ initialTab = 'dashboard' }) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   return (
     <div className="min-h-screen bg-white">
