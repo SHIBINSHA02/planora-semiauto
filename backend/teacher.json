@@ -1,0 +1,47 @@
+{
+    "1": {
+        "teacher_id": "T001",
+        "name": "John Doe",
+        "subject": [
+            "Mathematics",
+            "Physics",
+            "Chemistry"
+        ]
+    },
+    "2": {
+        "teacher_id": "T002",
+        "name": "Jane Doe",
+        "subject": [
+            "Mathematics",
+            "English",
+            "Chemistry"
+        ]
+    },
+    "3": {
+        "teacher_id": "T003",
+        "name": "Jim Doe",
+        "subject": [
+            "English",
+            "History",
+            "Biology"
+        ]
+    },
+    "4": {
+        "teacher_id": "T004",
+        "name": "Jill Doe",
+        "subject": [
+            "Physics",
+            "Chemistry",
+            "Biology"
+        ]
+    },
+    "5": {
+        "teacher_id": "T005",
+        "name": "Jack Doe",
+        "subject": [
+            "Computer Science",
+            "Mathematics",
+            "Physics"
+        ]
+    }
+}

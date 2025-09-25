@@ -1,0 +1,217 @@
+Directory structure:
+└── planora-semiauto/
+    └── backend/
+        ├── classroom.py
+        ├── main.py
+        ├── sample.json
+        ├── teacher.json
+        └── teacher.py
+
+================================================
+FILE: backend/classroom.py
+================================================
+class Classroom:
+    def __init__(self, classroom_id, name, subjects):
+        self.classroom_id = classroom_id,
+        self.name = name,
+        self.subjects = subjects,
+        self.classroomSchedule = []
+
+    def info_getter(self):
+        return {
+            "classroom_id": self.classroom_id,
+            "name": self.name,
+            "subjects": self.subjects,
+            "classroomSchedule": self.classroomSchedule
+        }
+
+    def add_classroom_schedule(self, day, time, subject):
+        self.classroomSchedule.append({
+            "day": day,
+            "time": time,
+            "subject": subject
+        })
+
+
+
+================================================
+FILE: backend/main.py
+================================================
+[Empty file]
+
+
+================================================
+FILE: backend/sample.json
+================================================
+{
+    "classroom": "CSE S7 R1",
+    "admin_email": "shibinikka@gmail.com",
+    "allocation": [
+        [
+            [
+                {
+                    "subject": "Mathematics",
+                    "teacher_id": "T001"
+                },
+                {
+                    "subject": "Physics Lab",
+                    "teacher_id": "T002"
+                },
+                {
+                    "subject": "Assembly",
+                    "teacher_id": "T005"
+                }
+            ],
+            [
+                {
+                    "subject": "History",
+                    "teacher_id": "T003"
+                }
+            ],
+            null,
+            [
+                {
+                    "subject": "English",
+                    "teacher_id": "T004"
+                },
+                {
+                    "subject": "Chemistry Lab",
+                    "teacher_id": "T002"
+                }
+            ],
+            null,
+            [
+                {
+                    "subject": "Art",
+                    "teacher_id": "T006"
+                }
+            ]
+        ],
+        [
+            null,
+            [
+                {
+                    "subject": "Mathematics",
+                    "teacher_id": "T001"
+                }
+            ],
+            [
+                {
+                    "subject": "Biology",
+                    "teacher_id": "T007"
+                },
+                {
+                    "subject": "Computer Science",
+                    "teacher_id": "T001"
+                }
+            ],
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ]
+    ]
+}
+
+
+================================================
+FILE: backend/teacher.json
+================================================
+{
+    "1": {
+        "teacher_id": "T001",
+        "name": "John Doe",
+        "subject": [
+            "Mathematics",
+            "Physics",
+            "Chemistry"
+        ]
+    },
+    "2": {
+        "teacher_id": "T002",
+        "name": "Jane Doe",
+        "subject": [
+            "Mathematics",
+            "English",
+            "Chemistry"
+        ]
+    },
+    "3": {
+        "teacher_id": "T003",
+        "name": "Jim Doe",
+        "subject": [
+            "English",
+            "History",
+            "Biology"
+        ]
+    },
+    "4": {
+        "teacher_id": "T004",
+        "name": "Jill Doe",
+        "subject": [
+            "Physics",
+            "Chemistry",
+            "Biology"
+        ]
+    },
+    "5": {
+        "teacher_id": "T005",
+        "name": "Jack Doe",
+        "subject": [
+            "Computer Science",
+            "Mathematics",
+            "Physics"
+        ]
+    }
+}
+
+
+================================================
+FILE: backend/teacher.py
+================================================
+class Teacher:
+    def __init__(self, teacher_id, name, subjects):
+        self.teacher_id = teacher_id,
+        self.name = name,
+        self.subjects = subjects,
+        self.teacherSchedule = []
+
+    def info_getter(self):
+        return {
+            "teacher_id": self.teacher_id,
+            "name": self.name,
+            "subjects": self.subjects,
+            "teacherSchedule": self.teacherSchedule
+        }
+
+    def add_teacher_schedule(self, day, time, subject):
+        self.teacherSchedule.append({
+            "day": day,
+            "time": time,
+            "subject": subject
+        })
+
+
