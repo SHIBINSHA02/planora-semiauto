@@ -1,15 +1,12 @@
-import React, { useState } from 'react'
-import { Calendar, Clock, Users, BookOpen, Star, ArrowRight, Menu, X, User, LogOut } from 'lucide-react'
+// src/components/Home/Home.jsx
+// src/components/Home.jsx
+import React, { useState } from 'react';
+import { Calendar, Clock, Users, BookOpen, Star, ArrowRight, Menu, X, User, LogOut } from 'lucide-react';
+import { useAuth } from '../Auth/Auth';
 
-function LandingPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  // Minimal stand-ins so this page works without auth wiring
-  const [user] = useState(null)
-  const logout = () => {}
-  const navigate = (path) => {
-    window.location.hash = `#${path}`
-  }
+const Homepage = ({ navigate }) => {
+  const { user, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const features = [
     {
@@ -32,7 +29,7 @@ function LandingPage() {
       title: "Resource Planning",
       description: "Optimize classroom and resource allocation to ensure maximum utilization and minimal conflicts."
     }
-  ]
+  ];
 
   const testimonials = [
     {
@@ -47,7 +44,7 @@ function LandingPage() {
       content: "Finally, a scheduling system that actually understands the complexity of modern education.",
       rating: 5
     }
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -58,12 +55,12 @@ function LandingPage() {
             <div className="flex items-center">
               <div className="flex items-center space-x-2">
                 <div className="flex-shrink-0">
-                  <img
-                    src="/logo.svg"
-                    alt="Planora Logo"
-                    className="h-14 w-auto object-contain"
-                  />
-                </div>
+            <img
+              src="./logo.svg"
+              alt="Planora Logo"
+              className="h-[70px] w-auto object-contain"
+            />
+          </div>
               </div>
             </div>
 
@@ -77,19 +74,36 @@ function LandingPage() {
               {user ? (
                 <div className="flex items-center space-x-3">
                   <span className="text-sm text-gray-700">Welcome, {user.name}</span>
-                  <button onClick={logout} className="text-gray-500 hover:text-red-600 transition-colors">
+                  
+                  <button
+                    onClick={logout}
+                    className="text-gray-500 hover:text-red-600 transition-colors"
+                  >
                     <LogOut className="h-5 w-5" />
                   </button>
                 </div>
               ) : (
                 <>
-                  <button onClick={() => navigate('login')} className="text-gray-700 hover:text-indigo-600 font-medium">Login</button>
-                  <button onClick={() => navigate('signup')} className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Get Started</button>
+                  <button
+                    onClick={() => navigate('login')}
+                    className="text-gray-700 hover:text-indigo-600 font-medium"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => navigate('signup')}
+                    className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                  >
+                    Get Started
+                  </button>
                 </>
               )}
             </div>
 
-            <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button 
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
@@ -104,13 +118,33 @@ function LandingPage() {
               <a href="#testimonials" className="block px-3 py-2 text-gray-700 hover:text-indigo-600">Testimonials</a>
               {user ? (
                 <>
-                  <button onClick={() => navigate('dashboard')} className="block w-full text-left px-3 py-2 text-gray-700 hover:text-indigo-600">Dashboard</button>
-                  <button onClick={logout} className="block w-full text-left px-3 py-2 text-red-600">Logout</button>
+                  <button
+                    onClick={() => navigate('dashboard')}
+                    className="block w-full text-left px-3 py-2 text-gray-700 hover:text-indigo-600"
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={logout}
+                    className="block w-full text-left px-3 py-2 text-red-600"
+                  >
+                    Logout
+                  </button>
                 </>
               ) : (
                 <>
-                  <button onClick={() => navigate('login')} className="block w-full text-left px-3 py-2 text-gray-700 hover:text-indigo-600">Login</button>
-                  <button onClick={() => navigate('signup')} className="block w-full text-left px-3 py-2 bg-indigo-600 text-white rounded-lg mt-2">Get Started</button>
+                  <button
+                    onClick={() => navigate('login')}
+                    className="block w-full text-left px-3 py-2 text-gray-700 hover:text-indigo-600"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => navigate('signup')}
+                    className="block w-full text-left px-3 py-2 bg-indigo-600 text-white rounded-lg mt-2"
+                  >
+                    Get Started
+                  </button>
                 </>
               )}
             </div>
@@ -131,21 +165,25 @@ function LandingPage() {
                 Streamline teacher schedules, optimize resources, and enhance educational efficiency with our intelligent scheduling platform.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <button onClick={() => navigate(user ? 'panel' : 'signup')} className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2">
+                <button
+                  onClick={() => navigate(user ? 'panel' : 'signup')}
+                  className="bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2"
+                >
                   <span>{user ? 'Go to Panel' : 'Start Free Trial'}</span>
                   <ArrowRight className="h-5 w-5" />
                 </button>
                 {user && (
-                  <button onClick={() => navigate('organization')} className="border-2 border-indigo-600 text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition-colors flex items-center justify-center space-x-2">
+                  <button
+                    onClick={() => navigate('organization')}
+                    className="border-2 border-indigo-600 text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition-colors flex items-center justify-center space-x-2"
+                  >
                     <span>Manage Organizations</span>
                     <Users className="h-5 w-5" />
                   </button>
                 )}
-                {/**
-                 * <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold hover:border-indigo-600 hover:text-indigo-600 transition-colors">
-                 *   Watch Demo
-                 * </button>
-                 */}
+                <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold hover:border-indigo-600 hover:text-indigo-600 transition-colors">
+                  Watch Demo
+                </button>
               </div>
             </div>
             <div className="relative">
@@ -199,8 +237,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/** Testimonials Section disabled per request */}
-      {/**
+      {/* Testimonials Section */}
       <section id="testimonials" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -211,6 +248,7 @@ function LandingPage() {
               Join thousands of schools already using Planora
             </p>
           </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
@@ -234,7 +272,6 @@ function LandingPage() {
           </div>
         </div>
       </section>
-      */}
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
@@ -274,9 +311,7 @@ function LandingPage() {
         </div>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default LandingPage
-
-
+export default Homepage;
