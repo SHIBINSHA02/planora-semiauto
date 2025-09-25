@@ -18,7 +18,11 @@ class Classroom(db.Model):
     classroom = db.Column(db.String(100), nullable=False)
     admin_email = db.Column(db.String(120), nullable=False)
     subject_details = db.Column(JSON, nullable=True)  # {"Math": 5, "Physics": 3, ...}
-    allocation = db.Column(JSON, nullable=True)      # full 5x6 grid
+    allocation = db.Column(
+        JSON,
+        nullable=False,
+        default=lambda: [[None for _ in range(6)] for _ in range(5)]
+    )      # full 5x6 grid default
 
     def to_dict(self):
         return {

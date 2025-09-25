@@ -374,3 +374,51 @@ def auto_generate_schedule(classroom_id: int):
     classroom.allocation = allocation
     db.session.commit()
     return jsonify({"message": "Auto-generate completed", "allocation": classroom.allocation})
+
+
+# Onboard a classroom with simple payload from UI
+# Payload example:
+# {
+#   "classname": "CSE S7 R1",
+#   "admin": "admin@example.com",
+#   "subjects": [
+#       {"subject": "Mathematics", "teachername": "Alice Johnson", "time": 5},
+#       {"subject": "Science", "teachername": "Brian Lee", "time": 3}
+#   ]
+# }
+@timetable_bp.route("/classrooms/onboard", methods=["POST"])
+def onboard_classroom():
+    data = request.json or {}
+    classname = (data.get("classname") or "").strip()
+    admin = (data.get("admin") or "").strip()
+    subjects = data.get("subjects") or []
+
+    if not classname or not admin or not isinstance(subjects, list) or len(subjects) == 0:
+        return jsonify({"error": "classname, admin, and non-empty subjects are required"}), 400
+
+    # Derive subject_details as {subject: total_time}
+    subject_details: dict[str, int] = {}
+    for entry in subjects:
+        subject = (entry.get("subject") or "").strip()
+        time = int(entry.get("time") or 0)
+        if subject and time > 0:
+            subject_details[subject] = subject_details.get(subject, 0) + time
+
+    # Determine next classroom_id
+    last = Classroom.query.order_by(Classroom.classroom_id.desc()).first()
+    next_classroom_id = (last.classroom_id + 1) if last and last.classroom_id is not None else 1
+
+    classroom = Classroom(
+        classroom_id=next_classroom_id,
+        classroom=classname,
+        admin_email=admin,
+        subject_details=subject_details,
+        allocation=[[None for _ in range(6)] for _ in range(5)],
+    )
+    db.session.add(classroom)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Classroom onboarded successfully",
+        **classroom.to_dict(),
+    }), 201

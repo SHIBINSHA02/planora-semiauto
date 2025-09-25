@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { TimetableAPI } from '../api/timetable';
 
 const ClassOnboarding = () => {
   const [className, setClassName] = useState('');
@@ -7,13 +8,53 @@ const ClassOnboarding = () => {
   const [count, setCount] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
   const [assignedTeachers, setAssignedTeachers] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const [subjects, setSubjects] = useState(["Mathematics", "Science", "English"]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { teachers: t } = await TimetableAPI.getTeachers();
+        setTeachers(t);
+      } catch (_) {
+        setTeachers([]);
+      }
+    })();
+  }, []);
+
+  const teacherNames = useMemo(() => teachers.map(t => t.teachername), [teachers]);
+
+  // Update subjects list when teacher changes to show only that teacher's subjects
+  useEffect(() => {
+    if (!teacherName) {
+      return;
+    }
+    const t = teachers.find(x => x.teachername === teacherName);
+    if (t && Array.isArray(t.subjects) && t.subjects.length > 0) {
+      setSubjects(t.subjects);
+      // If current subject not in teacher's list, reset it
+      if (!t.subjects.includes(subject)) {
+        setSubject('');
+      }
+    }
+  }, [teacherName, teachers]);
 
   const handleAddTeacher = () => {
     const trimmedTeacher = String(teacherName || '').trim();
     const trimmedSubject = String(subject || '').trim();
     const numericCount = count ? Number(count) : 0;
 
+    // Validate teacher and subject mapping from onboarded teachers
+    const selectedTeacher = teachers.find(x => x.teachername === trimmedTeacher);
+    const allowedSubjects = Array.isArray(selectedTeacher?.subjects) ? selectedTeacher.subjects : [];
+
     if (!trimmedTeacher || !trimmedSubject || numericCount <= 0) {
+      return;
+    }
+
+    if (allowedSubjects.length > 0 && !allowedSubjects.includes(trimmedSubject)) {
+      alert('Selected subject is not taught by this teacher.');
       return;
     }
 
@@ -38,36 +79,16 @@ const ClassOnboarding = () => {
       return;
     }
 
-    // transform assignedTeachers to backend schedule schema
-    // frontend stored: { teacherName, subject, count }
-    // backend expects: { subject, teachername, time }
-    const schedule = assignedTeachers.map((t) => ({
+    // transform assignedTeachers to backend schema: subjects
+    const subjectsPayload = assignedTeachers.map((t) => ({
       subject: t.subject,
       teachername: t.teacherName,
       time: Number(t.count) || 0,
     }));
 
-    const payload = {
-      admin: trimmedAdmin,
-      classname: trimmedClass,
-      schedule,
-    };
-
-    const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
     try {
-      const res = await fetch(`${API_BASE}/timetable/add_schedule`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || 'Failed to add schedule');
-      }
-
+      setIsSubmitting(true);
+      await TimetableAPI.onboardClassroom({ classname: trimmedClass, admin: trimmedAdmin, subjects: subjectsPayload });
       // reset form on success
       setClassName('');
       setTeacherName('');
@@ -79,6 +100,8 @@ const ClassOnboarding = () => {
     } catch (err) {
       console.error('Add schedule failed:', err);
       alert('Failed to add schedule');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -106,9 +129,9 @@ const ClassOnboarding = () => {
             }`}
           >
             <option value="" disabled>Select a teacher</option>
-            <option value="Alice Johnson">Alice Johnson</option>
-            <option value="Brian Lee">Brian Lee</option>
-            <option value="Chitra Patel">Chitra Patel</option>
+            {teacherNames.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
           </select>
         </div>
 
@@ -122,9 +145,9 @@ const ClassOnboarding = () => {
             }`}
           >
             <option value="" disabled>Select a subject</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="Science">Science</option>
-            <option value="English">English</option>
+            {subjects.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
           </select>
         </div>
 
@@ -178,9 +201,10 @@ const ClassOnboarding = () => {
       <div className="pt-2">
         <button
           type="submit"
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200 shadow"
+          disabled={isSubmitting}
+          className={`w-full ${isSubmitting ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white'} font-semibold py-3 rounded-lg transition-colors duration-200 shadow`}
         >
-          Submit
+          {isSubmitting ? 'Submitting…' : 'Submit'}
         </button>
       </div>
     </form>

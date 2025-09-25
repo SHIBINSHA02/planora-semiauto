@@ -39,6 +39,8 @@ export const TimetableAPI = {
       body: { dayIndex, periodIndex, assignments },
     }),
   autoGenerate: (classroomId) => http('POST', `/timetable/classrooms/${classroomId}/auto_generate`),
+  onboardClassroom: ({ classname, admin, subjects }) =>
+    http('POST', '/timetable/classrooms/onboard', { body: { classname, admin, subjects } }),
 };
 
 export default TimetableAPI;
