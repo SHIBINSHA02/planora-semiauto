@@ -15,5 +15,13 @@ class Teacher:
             "teacherSchedule": self.teacherSchedule
         }
 
-    def add_teacher_schedule(self, day, time, subject):
-        self.teacherSchedule[day][time] = subject
+    def add_teacher_schedule(self, day, period, classroom, subject):
+        period_details = {
+            "classroom": classroom,
+            "subject": subject,
+        }
+        if self.teacherSchedule[day][period] is not None:
+            print("Period already occupied")
+            return False
+        self.teacherSchedule[day][period] = period_details
+        return True
