@@ -1,7 +1,20 @@
 from flask import Blueprint, request, jsonify
-from .models import db, Teacher, Subject, Classroom, Schedule
-
+from .models import db, Teacher, Classroom,Subject
 timetable_bp = Blueprint("timetable", __name__)
+
+
+
+#---------------:end points:-------------
+#GET /timetable/teachers
+#POST /timetable/add_teacher    
+#POST /timetable/add_schedule
+#GET /timetable/classroom/<classname>
+#-----------------------------------------
+
+
+
+
+
 
 # 0. Get Teachers List
 # -----------------------------
@@ -32,8 +45,7 @@ def get_teachers():
         })
     return jsonify({"teachers": result})
 
-# 1. Add Teacher
-# -----------------------------
+
 # 1. Add Teacher
 # -----------------------------
 # POST /timetable/add_teacher
@@ -63,77 +75,121 @@ def add_teacher():
 
 # 2. Add Schedule
 # -----------------------------
-# 2. Add Schedule
-# -----------------------------
 # POST /timetable/add_schedule
-# Input JSON format:
+# Input JSON format (can contain multiple classrooms):
 # {
-#   "admin": "alice@example.com",        # email of teacher who can edit this class
-#   "classname": "ClassA",               # name of the class
-#   "schedule": [
-#       {"subject": "Math", "teachername": "Alice", "time": 5},
-#       {"subject": "English", "teachername": "Bob", "time": 3},
-#       {"subject": "Physics", "teachername": "Alice", "time": 2}
-#   ]
+#   "1": {
+#       "classroom_id": 1,
+#       "classroom": "CSE S7 R1",
+#       "subject_details": {
+#           "Mathematics": 5,
+#           "Physics": 3,
+#           "Assembly": 3
+#       },
+#       "admin_email": "shibinikka@gmail.com",
+#       "allocation": [
+#           [
+#               [{"subject": "Mathematics", "teacher_id": "T001"}, {"subject": "Physics", "teacher_id": "T002"}],
+#               null,
+#               ...
+#           ],
+#           ...
+#       ]
+#   },
+#   "2": { ... }
 # }
 # Notes:
-# - "time" represents number of weekly slots for that subject
-# - "teachername" must match an existing teacher
+# - "subject_details" maps each subject to the number of weekly slots
+# - "allocation" is a 5x6 list representing 5 days and 6 periods per day
+# - If classroom_id exists, the record will be updated; otherwise, a new classroom is created
 # Response JSON:
 # {
-#   "message": "Schedule added successfully"
+#   "message": "Classrooms added/updated successfully",
+#   "ids": [1, 2]  # list of classroom_ids added or updated
 # }
 # ------------------------------------
 @timetable_bp.route("/add_schedule", methods=["POST"])
 def add_schedule():
-    data = request.json
+    data = request.json  # Expecting JSON like {"1": {classroom_id, classroom, subject_details, admin_email, allocation}, ...}
 
-    classroom = Classroom.query.filter_by(name=data["classname"]).first()
-    if not classroom:
-        classroom = Classroom(name=data["classname"], admin_mail=data["admin"])
-        db.session.add(classroom)
-        db.session.commit()
+    if not data:
+        return jsonify({"error": "Invalid JSON"}), 400
 
-    for entry in data["schedule"]:
-        sched = Schedule(
-            subject=entry["subject"],
-            teachername=entry["teachername"],
-            slots_per_week=entry["time"],  # time means slots/week
-            classroom_id=classroom.id
-        )
-        db.session.add(sched)
+    created = []
+    for key, value in data.items():
+        # Look for existing classroom by classroom_id
+        classroom = Classroom.query.filter_by(classroom_id=value["classroom_id"]).first()
+
+        if classroom:
+            # Update existing classroom
+            classroom.classroom = value.get("classroom", classroom.classroom)
+            classroom.admin_email = value.get("admin_email", classroom.admin_email)
+            classroom.subject_details = value.get("subject_details", classroom.subject_details)
+            classroom.allocation = value.get("allocation", classroom.allocation)
+        else:
+            # Create new classroom
+            classroom = Classroom(
+                classroom_id=value["classroom_id"],
+                classroom=value["classroom"],
+                admin_email=value["admin_email"],
+                subject_details=value.get("subject_details"),
+                allocation=value.get("allocation")
+            )
+            db.session.add(classroom)
+
+        created.append(classroom.classroom_id)
 
     db.session.commit()
-    return jsonify({"message": "Schedule added successfully"}), 201
-
+    return jsonify({"message": "Classrooms added/updated successfully", "ids": created}), 201
 # 3. Get Classroom Schedule
 # -----------------------------
-# GET /timetable/classroom/<classname>/schedule
+# GET /timetable/classroom/<classname>
+# URL Parameter:
+# - classname: string, the name of the classroom to fetch
+# Example URL:
+# http://127.0.0.1:5000/timetable/classroom/CSE%20S7%20R1
 # Response JSON when classroom exists:
 # {
-#   "classname": "ClassA",
-#   "admin": "alice@example.com",
-#   "schedule": [
-#     {"subject": "Math", "teachername": "Alice", "slots_per_week": 5},
-#     ...
+#   "classroom_id": 1,
+#   "classroom": "CSE S7 R1",
+#   "admin_email": "shibinikka@gmail.com",
+#   "subject_details": {
+#       "Mathematics": 5,
+#       "Physics": 3,
+#       "Assembly": 3,
+#       "History": 4,
+#       "Art": 5,
+#       "Computer Science": 5,
+#       "English": 5
+#   },
+#   "allocation": [
+#       [
+#           [{"subject": "Mathematics", "teacher_id": "T001"}, ...],
+#           ...
+#       ],
+#       ...
 #   ]
 # }
 # If classroom not found:
-# {"error": "Classroom not found"}
-@timetable_bp.route("/classroom/<string:classname>/schedule", methods=["GET"])
+# {
+#   "error": "Classroom not found"
+# }
+# Notes:
+# - Fetches a classroom by its name
+# - Returns full schedule (allocation) and subject details
+# ------------------------------------
+@timetable_bp.route("/classroom/<string:classname>", methods=["GET"])
 def get_classroom_schedule(classname):
-    classroom = Classroom.query.filter_by(name=classname).first()
+    # Fetch classroom by classroom_id
+    classroom = Classroom.query.filter_by(classroom=classname).first()
     if not classroom:
         return jsonify({"error": "Classroom not found"}), 404
 
-    schedule_items = [{
-        "subject": sched.subject,
-        "teachername": sched.teachername,
-        "slots_per_week": sched.slots_per_week
-    } for sched in classroom.schedules]
-
+    # Return classroom info including allocation and subject_details
     return jsonify({
-        "classname": classroom.name,
-        "admin": classroom.admin_mail,
-        "schedule": schedule_items
+        "classroom_id": classroom.classroom_id,
+        "classroom": classroom.classroom,
+        "admin_email": classroom.admin_email,
+        "subject_details": classroom.subject_details,
+        "allocation": classroom.allocation
     })
