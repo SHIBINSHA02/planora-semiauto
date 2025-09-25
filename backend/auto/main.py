@@ -159,7 +159,7 @@ def write_schedules_to_json(classroom_map, teachers_map):
                               for tid, t in teachers_map.items()}
     }
 
-    output_filename = "final_schedules.json"
+    output_filename = "backend/auto/gen_schedule.json"
     try:
         with open(output_filename, 'w') as f:
             json.dump(final_schedules, f, indent=4)
