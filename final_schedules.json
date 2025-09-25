@@ -5,8 +5,42 @@
             "final_allocation": [
                 [
                     {
+                        "subject": "Computer Science",
+                        "teacher": 6
+                    },
+                    {
                         "subject": "History",
                         "teacher": 4
+                    },
+                    {
+                        "subject": "Physics",
+                        "teacher": 2
+                    },
+                    {
+                        "subject": "English",
+                        "teacher": 7
+                    },
+                    {
+                        "subject": "Art",
+                        "teacher": 5
+                    },
+                    {
+                        "subject": "English",
+                        "teacher": 7
+                    }
+                ],
+                [
+                    {
+                        "subject": "Physics",
+                        "teacher": 2
+                    },
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
+                    {
+                        "subject": "Assembly",
+                        "teacher": 3
                     },
                     {
                         "subject": "Physics",
@@ -17,68 +51,8 @@
                         "teacher": 5
                     },
                     {
-                        "subject": "Computer Science",
-                        "teacher": 6
-                    },
-                    {
-                        "subject": "Assembly",
-                        "teacher": 3
-                    },
-                    {
-                        "subject": "Art",
-                        "teacher": 5
-                    }
-                ],
-                [
-                    {
                         "subject": "Mathematics",
                         "teacher": 1
-                    },
-                    {
-                        "subject": "Computer Science",
-                        "teacher": 6
-                    },
-                    {
-                        "subject": "Physics",
-                        "teacher": 2
-                    },
-                    {
-                        "subject": "English",
-                        "teacher": 7
-                    },
-                    {
-                        "subject": "English",
-                        "teacher": 7
-                    },
-                    {
-                        "subject": "History",
-                        "teacher": 4
-                    }
-                ],
-                [
-                    {
-                        "subject": "Mathematics",
-                        "teacher": 1
-                    },
-                    {
-                        "subject": "Art",
-                        "teacher": 5
-                    },
-                    {
-                        "subject": "Mathematics",
-                        "teacher": 1
-                    },
-                    {
-                        "subject": "Physics",
-                        "teacher": 2
-                    },
-                    {
-                        "subject": "Assembly",
-                        "teacher": 3
-                    },
-                    {
-                        "subject": "History",
-                        "teacher": 4
                     }
                 ],
                 [
@@ -87,30 +61,38 @@
                         "teacher": 4
                     },
                     {
+                        "subject": "Computer Science",
+                        "teacher": 6
+                    },
+                    {
                         "subject": "Assembly",
                         "teacher": 3
                     },
                     {
-                        "subject": "Computer Science",
-                        "teacher": 6
-                    },
-                    {
                         "subject": "English",
                         "teacher": 7
                     },
                     {
-                        "subject": "Mathematics",
-                        "teacher": 1
-                    },
-                    {
                         "subject": "Computer Science",
                         "teacher": 6
+                    },
+                    {
+                        "subject": "Art",
+                        "teacher": 5
                     }
                 ],
                 [
                     {
+                        "subject": "Computer Science",
+                        "teacher": 6
+                    },
+                    {
                         "subject": "Mathematics",
                         "teacher": 1
+                    },
+                    {
+                        "subject": "English",
+                        "teacher": 7
                     },
                     {
                         "subject": "Computer Science",
@@ -121,16 +103,34 @@
                         "teacher": 7
                     },
                     {
-                        "subject": "English",
-                        "teacher": 7
+                        "subject": "Art",
+                        "teacher": 5
+                    }
+                ],
+                [
+                    {
+                        "subject": "Assembly",
+                        "teacher": 3
+                    },
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
                     },
                     {
                         "subject": "Art",
                         "teacher": 5
                     },
                     {
-                        "subject": "Art",
-                        "teacher": 5
+                        "subject": "History",
+                        "teacher": 4
+                    },
+                    {
+                        "subject": "History",
+                        "teacher": 4
+                    },
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
                     }
                 ]
             ]
@@ -140,64 +140,8 @@
             "final_allocation": [
                 [
                     {
-                        "subject": "Physics",
-                        "teacher": 2
-                    },
-                    {
-                        "subject": "English",
-                        "teacher": 7
-                    },
-                    {
-                        "subject": "Physics",
-                        "teacher": 2
-                    },
-                    {
-                        "subject": "Mathematics",
-                        "teacher": 1
-                    },
-                    {
-                        "subject": "Mathematics",
-                        "teacher": 1
-                    },
-                    {
-                        "subject": "Assembly",
-                        "teacher": 3
-                    }
-                ],
-                [
-                    {
                         "subject": "Art",
                         "teacher": 5
-                    },
-                    {
-                        "subject": "History",
-                        "teacher": 4
-                    },
-                    {
-                        "subject": "Assembly",
-                        "teacher": 3
-                    },
-                    {
-                        "subject": "Mathematics",
-                        "teacher": 1
-                    },
-                    {
-                        "subject": "Art",
-                        "teacher": 5
-                    },
-                    {
-                        "subject": "Physics",
-                        "teacher": 2
-                    }
-                ],
-                [
-                    {
-                        "subject": "History",
-                        "teacher": 4
-                    },
-                    {
-                        "subject": "Mathematics",
-                        "teacher": 1
                     },
                     {
                         "subject": "Computer Science",
@@ -208,15 +152,57 @@
                         "teacher": 7
                     },
                     {
-                        "subject": "Computer Science",
-                        "teacher": 6
+                        "subject": "Art",
+                        "teacher": 5
                     },
                     {
                         "subject": "English",
                         "teacher": 7
+                    },
+                    {
+                        "subject": "Computer Science",
+                        "teacher": 6
                     }
                 ],
                 [
+                    {
+                        "subject": "English",
+                        "teacher": 7
+                    },
+                    {
+                        "subject": "Computer Science",
+                        "teacher": 6
+                    },
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
+                    {
+                        "subject": "Computer Science",
+                        "teacher": 6
+                    },
+                    {
+                        "subject": "Physics",
+                        "teacher": 2
+                    },
+                    {
+                        "subject": "History",
+                        "teacher": 4
+                    }
+                ],
+                [
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
+                    {
+                        "subject": "Physics",
+                        "teacher": 2
+                    },
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
                     {
                         "subject": "Art",
                         "teacher": 5
@@ -226,46 +212,60 @@
                         "teacher": 4
                     },
                     {
-                        "subject": "History",
-                        "teacher": 4
+                        "subject": "Physics",
+                        "teacher": 2
+                    }
+                ],
+                [
+                    {
+                        "subject": "Assembly",
+                        "teacher": 3
                     },
                     {
                         "subject": "Assembly",
                         "teacher": 3
                     },
                     {
-                        "subject": "Computer Science",
-                        "teacher": 6
-                    },
-                    {
-                        "subject": "English",
-                        "teacher": 7
-                    }
-                ],
-                [
-                    {
-                        "subject": "Computer Science",
-                        "teacher": 6
+                        "subject": "History",
+                        "teacher": 4
                     },
                     {
                         "subject": "Art",
                         "teacher": 5
-                    },
-                    {
-                        "subject": "Computer Science",
-                        "teacher": 6
-                    },
-                    {
-                        "subject": "Art",
-                        "teacher": 5
-                    },
-                    {
-                        "subject": "English",
-                        "teacher": 7
                     },
                     {
                         "subject": "Mathematics",
                         "teacher": 1
+                    },
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    }
+                ],
+                [
+                    {
+                        "subject": "Art",
+                        "teacher": 5
+                    },
+                    {
+                        "subject": "Assembly",
+                        "teacher": 3
+                    },
+                    {
+                        "subject": "English",
+                        "teacher": 7
+                    },
+                    {
+                        "subject": "Computer Science",
+                        "teacher": 6
+                    },
+                    {
+                        "subject": "English",
+                        "teacher": 7
+                    },
+                    {
+                        "subject": "History",
+                        "teacher": 4
                     }
                 ]
             ]
@@ -279,31 +279,12 @@
                     null,
                     null,
                     null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Mathematics"
-                    },
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Mathematics"
-                    },
-                    null
-                ],
-                [
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Mathematics"
-                    },
                     null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Mathematics"
-                    },
                     null,
                     null
                 ],
                 [
+                    null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "Mathematics"
@@ -312,8 +293,21 @@
                         "classroom": "CSE S7 R2",
                         "subject": "Mathematics"
                     },
+                    null,
+                    null,
                     {
                         "classroom": "CSE S7 R1",
+                        "subject": "Mathematics"
+                    }
+                ],
+                [
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Mathematics"
+                    },
+                    null,
+                    {
+                        "classroom": "CSE S7 R2",
                         "subject": "Mathematics"
                     },
                     null,
@@ -322,26 +316,32 @@
                 ],
                 [
                     null,
-                    null,
-                    null,
-                    null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "Mathematics"
                     },
-                    null
-                ],
-                [
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Mathematics"
-                    },
-                    null,
-                    null,
                     null,
                     null,
                     {
                         "classroom": "CSE S7 R2",
+                        "subject": "Mathematics"
+                    },
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Mathematics"
+                    }
+                ],
+                [
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Mathematics"
+                    },
+                    null,
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
                         "subject": "Mathematics"
                     }
                 ]
@@ -351,16 +351,10 @@
             "name": "Physics Teacher",
             "final_allocation": [
                 [
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Physics"
-                    },
+                    null,
+                    null,
                     {
                         "classroom": "CSE S7 R1",
-                        "subject": "Physics"
-                    },
-                    {
-                        "classroom": "CSE S7 R2",
                         "subject": "Physics"
                     },
                     null,
@@ -368,29 +362,35 @@
                     null
                 ],
                 [
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Physics"
+                    },
                     null,
                     null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "Physics"
                     },
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Physics"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Physics"
+                    },
+                    null,
                     null,
                     null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "Physics"
                     }
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Physics"
-                    },
-                    null,
-                    null
                 ],
                 [
                     null,
@@ -418,20 +418,14 @@
                     null,
                     null,
                     null,
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Assembly"
-                    },
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Assembly"
-                    }
+                    null,
+                    null
                 ],
                 [
                     null,
                     null,
                     {
-                        "classroom": "CSE S7 R2",
+                        "classroom": "CSE S7 R1",
                         "subject": "Assembly"
                     },
                     null,
@@ -441,31 +435,37 @@
                 [
                     null,
                     null,
-                    null,
-                    null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "Assembly"
                     },
+                    null,
+                    null,
                     null
                 ],
                 [
-                    null,
                     {
-                        "classroom": "CSE S7 R1",
+                        "classroom": "CSE S7 R2",
                         "subject": "Assembly"
                     },
-                    null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "Assembly"
                     },
                     null,
+                    null,
+                    null,
                     null
                 ],
                 [
-                    null,
-                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Assembly"
+                    },
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Assembly"
+                    },
                     null,
                     null,
                     null,
@@ -477,11 +477,11 @@
             "name": "History Teacher",
             "final_allocation": [
                 [
+                    null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "History"
                     },
-                    null,
                     null,
                     null,
                     null,
@@ -489,29 +489,12 @@
                 ],
                 [
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
                     {
                         "classroom": "CSE S7 R2",
-                        "subject": "History"
-                    },
-                    null,
-                    null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "History"
-                    }
-                ],
-                [
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "History"
-                    },
-                    null,
-                    null,
-                    null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R1",
                         "subject": "History"
                     }
                 ],
@@ -520,10 +503,18 @@
                         "classroom": "CSE S7 R1",
                         "subject": "History"
                     },
+                    null,
+                    null,
+                    null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "History"
                     },
+                    null
+                ],
+                [
+                    null,
+                    null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "History"
@@ -536,9 +527,18 @@
                     null,
                     null,
                     null,
-                    null,
-                    null,
-                    null
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "History"
+                    },
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "History"
+                    },
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "History"
+                    }
                 ]
             ]
         },
@@ -546,13 +546,55 @@
             "name": "Art Teacher",
             "final_allocation": [
                 [
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Art"
+                    },
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Art"
+                    },
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Art"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    null,
                     null,
                     null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "Art"
                     },
+                    null
+                ],
+                [
                     null,
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Art"
+                    },
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Art"
+                    }
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Art"
+                    },
                     null,
                     {
                         "classroom": "CSE S7 R1",
@@ -565,55 +607,13 @@
                         "subject": "Art"
                     },
                     null,
-                    null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Art"
-                    },
-                    null
-                ],
-                [
-                    null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "Art"
                     },
                     null,
                     null,
-                    null,
                     null
-                ],
-                [
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Art"
-                    },
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Art"
-                    },
-                    null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Art"
-                    },
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Art"
-                    },
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Art"
-                    }
                 ]
             ]
         },
@@ -621,72 +621,72 @@
             "name": "CS Teacher",
             "final_allocation": [
                 [
-                    null,
-                    null,
-                    null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "Computer Science"
                     },
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Computer Science"
-                    },
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                [
-                    null,
-                    null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "Computer Science"
                     },
                     null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Computer Science"
-                    },
-                    null
-                ],
-                [
                     null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Computer Science"
-                    },
                     null,
                     {
                         "classroom": "CSE S7 R2",
-                        "subject": "Computer Science"
-                    },
-                    {
-                        "classroom": "CSE S7 R1",
                         "subject": "Computer Science"
                     }
                 ],
                 [
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "Computer Science"
-                    },
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "Computer Science"
-                    },
+                    null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "Computer Science"
                     },
                     null,
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Computer Science"
+                    },
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Computer Science"
+                    },
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Computer Science"
+                    },
+                    null
+                ],
+                [
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Computer Science"
+                    },
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Computer Science"
+                    },
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "Computer Science"
+                    },
                     null,
                     null
                 ]
@@ -697,10 +697,30 @@
             "final_allocation": [
                 [
                     null,
+                    null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "English"
                     },
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "English"
+                    },
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "English"
+                    },
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "English"
+                    }
+                ],
+                [
+                    {
+                        "classroom": "CSE S7 R2",
+                        "subject": "English"
+                    },
+                    null,
                     null,
                     null,
                     null,
@@ -714,6 +734,17 @@
                         "classroom": "CSE S7 R1",
                         "subject": "English"
                     },
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "English"
+                    },
+                    null,
                     {
                         "classroom": "CSE S7 R1",
                         "subject": "English"
@@ -723,42 +754,11 @@
                 [
                     null,
                     null,
-                    null,
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "English"
                     },
                     null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "English"
-                    }
-                ],
-                [
-                    null,
-                    null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "English"
-                    },
-                    null,
-                    {
-                        "classroom": "CSE S7 R2",
-                        "subject": "English"
-                    }
-                ],
-                [
-                    null,
-                    null,
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "English"
-                    },
-                    {
-                        "classroom": "CSE S7 R1",
-                        "subject": "English"
-                    },
                     {
                         "classroom": "CSE S7 R2",
                         "subject": "English"
