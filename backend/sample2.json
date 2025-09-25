@@ -1,0 +1,114 @@
+{
+    "1": {
+        "classroom_id": 1,
+        "classroom": "CSE S7 R1",
+        "subject_details": {
+            "Mathematics": 5,
+            "Physics": 3,
+            "Assembly": 3,
+            "History": 4,
+            "Art": 5,
+            "Computer Science": 5,
+            "English": 5
+        },
+        "admin_email": "shibinikka@gmail.com",
+        "allocation": [
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
+        ]
+    },
+    "2": {
+        "classroom_id": 2,
+        "classroom": "CSE S7 R2",
+        "admin_email": "sdtheevandi@gmail.com",
+        "subject_details": {
+            "Mathematics": 5,
+            "Physics": 3,
+            "Assembly": 3,
+            "History": 4,
+            "Art": 5,
+            "Computer Science": 5,
+            "English": 5
+        },
+        "allocation": [
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
+        ]
+    }
+}

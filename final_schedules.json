@@ -1,0 +1,369 @@
+{
+    "class_schedules": {
+        "1": {
+            "name": "CSE S7 R1",
+            "final_allocation": [
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    {
+                        "subject": "Physics",
+                        "teacher": 1
+                    }
+                ],
+                [
+                    null,
+                    null,
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
+                    {
+                        "subject": "Physics",
+                        "teacher": 1
+                    },
+                    null,
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    }
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
+                    null
+                ],
+                [
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
+                    null,
+                    {
+                        "subject": "Mathematics",
+                        "teacher": 1
+                    },
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "subject": "Physics",
+                        "teacher": 1
+                    },
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ]
+        },
+        "2": {
+            "name": "CSE S7 R2",
+            "final_allocation": [
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ]
+        }
+    },
+    "teacher_schedules": {
+        "1": {
+            "name": "John Doe",
+            "final_allocation": [
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Physics"
+                    }
+                ],
+                [
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Mathematics"
+                    },
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Physics"
+                    },
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Mathematics"
+                    }
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Mathematics"
+                    },
+                    null
+                ],
+                [
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Mathematics"
+                    },
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Mathematics"
+                    },
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "classroom": "CSE S7 R1",
+                        "subject": "Physics"
+                    },
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ]
+        },
+        "2": {
+            "name": "Jane Doe",
+            "final_allocation": [
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ]
+        },
+        "3": {
+            "name": "Jim Doe",
+            "final_allocation": [
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ]
+        },
+        "4": {
+            "name": "Jill Doe",
+            "final_allocation": [
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ]
+        },
+        "5": {
+            "name": "Jack Doe",
+            "final_allocation": [
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ]
+        }
+    }
+}
