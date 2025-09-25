@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ScheduleTable from './ScheduleTable';
 
@@ -13,8 +13,10 @@ const ClassroomScheduleView = ({
   getAvailableTeachers,
   getTeachersForSubject,
   getSubjectsForClass,
-  isTeacherAvailable
+  isTeacherAvailable,
+  autoGenerateSchedule,
 }) => {
+  const [isAutoLoading, setIsAutoLoading] = useState(false);
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   const periods = ['Period 1', 'Period 2', 'Period 3', 'Period 4', 'Period 5', 'Period 6'];
 
@@ -290,6 +292,38 @@ const ClassroomScheduleView = ({
           </div>
         </div>
       )}
+
+      {selectedClassroom && (
+        <div className="pt-2 flex justify-end">
+          <button
+            type="button"
+            disabled={isAutoLoading || !autoGenerateSchedule}
+            onClick={async () => {
+              if (!autoGenerateSchedule) return;
+              try {
+                setIsAutoLoading(true);
+                await autoGenerateSchedule(parseInt(selectedClassroom));
+              } finally {
+                setIsAutoLoading(false);
+              }
+            }}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-md font-medium shadow ${
+              isAutoLoading || !autoGenerateSchedule
+                ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+            }`}
+          >
+            {isAutoLoading ? (
+              <>
+                <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Generating...
+              </>
+            ) : (
+              'Auto Schedule'
+            )}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -305,6 +339,7 @@ ClassroomScheduleView.propTypes = {
   getTeachersForSubject: PropTypes.func.isRequired,
   getSubjectsForClass: PropTypes.func.isRequired,
   isTeacherAvailable: PropTypes.func.isRequired,
+  autoGenerateSchedule: PropTypes.func,
 };
 
 export default ClassroomScheduleView;

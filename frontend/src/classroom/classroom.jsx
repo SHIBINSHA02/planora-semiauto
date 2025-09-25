@@ -14,6 +14,7 @@ const Classroom = () => {
   const getTeachersForSubject = () => [];
   const getSubjectsForClass = () => [];
   const isTeacherAvailable = () => true;
+  const autoGenerateSchedule = async () => {};
 
   return (
     <div className="p-4">
@@ -30,6 +31,7 @@ const Classroom = () => {
         getTeachersForSubject={getTeachersForSubject}
         getSubjectsForClass={getSubjectsForClass}
         isTeacherAvailable={isTeacherAvailable}
+        autoGenerateSchedule={autoGenerateSchedule}
       />
     </div>
   );
