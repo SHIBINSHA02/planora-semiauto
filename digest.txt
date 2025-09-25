@@ -4,6 +4,7 @@ Directory structure:
         ├── classroom.py
         ├── main.py
         ├── sample.json
+        ├── subject.py
         ├── teacher.json
         └── teacher.py
 
@@ -12,10 +13,10 @@ FILE: backend/classroom.py
 ================================================
 class Classroom:
     def __init__(self, classroom_id, name, subjects):
-        self.classroom_id = classroom_id,
-        self.name = name,
-        self.subjects = subjects,
-        self.classroomSchedule = []
+        self.classroom_id = classroom_id
+        self.name = name
+        self.subjects = subjects
+        self.classroomSchedule = [[None for _ in range(6)] for _ in range(5)]
 
     def info_getter(self):
         return {
@@ -25,19 +26,27 @@ class Classroom:
             "classroomSchedule": self.classroomSchedule
         }
 
-    def add_classroom_schedule(self, day, time, subject):
-        self.classroomSchedule.append({
-            "day": day,
-            "time": time,
-            "subject": subject
-        })
+    def add_classroom_schedule(self, day, time, subject, teacher):
+        self.classroomSchedule[day][time] = [subject, teacher]
 
 
 
 ================================================
 FILE: backend/main.py
 ================================================
-[Empty file]
+from teacher import Teacher
+
+
+def main():
+    T1 = Teacher(1, "John Doe", "john.doe@example.com", ["Math", "Science"])
+    T1.add_teacher_schedule(0, 0, "Math")
+    T1.add_teacher_schedule(0, 1, "Science")
+    print(T1.info_getter())
+
+
+if __name__ == "__main__":
+    main()
+
 
 
 ================================================
@@ -138,6 +147,22 @@ FILE: backend/sample.json
 
 
 ================================================
+FILE: backend/subject.py
+================================================
+class Subject:
+    def __init__(self, subject_id, name, is_lab, periods_per_session):
+        self.subject_id = subject_id
+        self.name = name
+        self.is_lab = is_lab
+        self.periods_per_session = periods_per_session
+
+    def is_lab_subject(self):
+        """Returns True if the subject requires consecutive lab periods."""
+        return self.is_lab
+
+
+
+================================================
 FILE: backend/teacher.json
 ================================================
 {
@@ -193,25 +218,23 @@ FILE: backend/teacher.json
 FILE: backend/teacher.py
 ================================================
 class Teacher:
-    def __init__(self, teacher_id, name, subjects):
-        self.teacher_id = teacher_id,
-        self.name = name,
-        self.subjects = subjects,
-        self.teacherSchedule = []
+    def __init__(self, teacher_id, name, mail, subjects):
+        self.teacher_id = teacher_id
+        self.name = name
+        self.mail = mail
+        self.subjects = subjects
+        self.teacherSchedule = [[None for _ in range(6)] for _ in range(5)]
 
     def info_getter(self):
         return {
             "teacher_id": self.teacher_id,
             "name": self.name,
+            "mail": self.mail,
             "subjects": self.subjects,
             "teacherSchedule": self.teacherSchedule
         }
 
     def add_teacher_schedule(self, day, time, subject):
-        self.teacherSchedule.append({
-            "day": day,
-            "time": time,
-            "subject": subject
-        })
+        self.teacherSchedule[day][time] = subject
 
 

@@ -1,8 +1,8 @@
 class Classroom:
-    def __init__(self, classroom_id, name, subjects):
+    def __init__(self, classroom_id, name, subject_details):
         self.classroom_id = classroom_id
         self.name = name
-        self.subjects = subjects
+        self.subject_details = subject_details
         self.classroomSchedule = [[None for _ in range(6)] for _ in range(5)]
 
     def info_getter(self):
