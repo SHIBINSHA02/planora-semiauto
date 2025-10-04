@@ -1,3 +1,4 @@
+// frontend/src/dashboard/dashboard.jsx
 import React, { useEffect, useState } from 'react';
 import ClassOnboarding from './class_onboarding';
 import TeacherOnboarding from './teacher_onboarding';

@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import LandingPage from './landing/landing';
 import React, { useEffect, useState } from 'react';
 import Dashboard from './dashboard/dashboard';

@@ -1,3 +1,4 @@
+// frontend/src/landing/landing.jsx
 import React, { useState } from 'react'
 import { Calendar, Clock, Users, BookOpen, Star, ArrowRight, Menu, X, User, LogOut } from 'lucide-react'
 

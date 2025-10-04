@@ -1,3 +1,4 @@
+// frontend/src/components/hero.jsx
 import React from 'react'
 import { Calendar, ArrowRight, Users, Star, User } from 'lucide-react'
 

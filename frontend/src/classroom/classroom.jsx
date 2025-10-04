@@ -1,3 +1,4 @@
+// frontend/src/classroom/classroom.jsx
 import React from 'react';
 import ClassroomScheduleView from '../components/ClassroomScheduleView';
 import ErrorBoundary from '../components/ErrorBoundary';

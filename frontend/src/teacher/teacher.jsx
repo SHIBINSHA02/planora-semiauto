@@ -1,3 +1,4 @@
+// frontend/src/teacher/teacher.jsx
 import React from 'react';
 import ScheduleTable from '../components/ScheduleTable';
 

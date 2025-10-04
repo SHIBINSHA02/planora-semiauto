@@ -1,3 +1,4 @@
+// frontend/src/components/header.jsx
 import React, { useState } from "react";
 import { Menu, X, LogOut } from "lucide-react";
 

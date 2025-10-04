@@ -1,3 +1,4 @@
+// frontend/src/components/footer.jsx
 import React from "react";
 import { Calendar } from "lucide-react";
 

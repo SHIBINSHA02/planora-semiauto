@@ -1,3 +1,4 @@
+// frontend/src/components/ScheduleTable.jsx
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
